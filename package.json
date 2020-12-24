@@ -1,0 +1,44 @@
+{
+  "name": "tensorflow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "@tensorflow/tfjs": "^2.7.0",
+    "@tensorflow/tfjs-node": "^2.7.0",
+    "debug": "^3.2.7",
+    "iconv-lite": "^0.4.24",
+    "ms": "^2.1.3",
+    "node-fetch": "^2.6.1",
+    "nopt": "^4.0.3",
+    "npm-bundled": "^1.1.1",
+    "npm-normalize-package-bin": "^1.0.1",
+    "npm-packlist": "^1.4.8",
+    "number-is-nan": "^1.0.1",
+    "object-assign": "^4.1.1",
+    "os-homedir": "^1.0.2",
+    "os-tmpdir": "^1.0.2",
+    "osenv": "^0.1.5",
+    "path-is-absolute": "^1.0.1",
+    "process-nextick-args": "^2.0.1",
+    "regenerator-runtime": "^0.13.7",
+    "require-directory": "^2.1.1",
+    "safe-buffer": "^5.1.2",
+    "safer-buffer": "^2.1.2",
+    "sax": "^1.2.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kutselabskii/tensorflow-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kutselabskii/tensorflow-js/issues"
+  },
+  "homepage": "https://github.com/kutselabskii/tensorflow-js#readme"
+}
