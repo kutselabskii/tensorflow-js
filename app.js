@@ -20,7 +20,7 @@ require('@tensorflow/tfjs-node');
 // });
 
 const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'content-type': 'text/html' })
+  res.writeHead(200)
   fs.createReadStream('index.html').pipe(res)
 })
 

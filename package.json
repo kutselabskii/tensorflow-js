@@ -25,7 +25,8 @@
     "require-directory": "^2.1.1",
     "safe-buffer": "^5.1.2",
     "safer-buffer": "^2.1.2",
-    "sax": "^1.2.4"
+    "sax": "^1.2.4",
+    "webcam-easy": "^1.0.5"
   },
   "devDependencies": {},
   "scripts": {
