@@ -1,8 +1,19 @@
 const tf = require('@tensorflow/tfjs');
-const http = require('http')
-const fs = require('fs')
-
 require('@tensorflow/tfjs-node');
+
+const express = require('express');
+const app = express();
+
+app.use(express.static('public'));
+
+app.listen(3000, () => {
+  console.log('listening on 3000');
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
+
 
 // const model = tf.sequential();
 // model.add(tf.layers.dense({units: 100, activation: 'relu', inputShape: [10]}));
@@ -19,9 +30,4 @@ require('@tensorflow/tfjs-node');
 //   }
 // });
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200)
-  fs.createReadStream('index.html').pipe(res)
-})
 
-server.listen(process.env.PORT || 3000)

@@ -7,6 +7,7 @@
     "@tensorflow/tfjs": "^2.7.0",
     "@tensorflow/tfjs-node": "^2.7.0",
     "debug": "^3.2.7",
+    "express": "^4.17.1",
     "iconv-lite": "^0.4.24",
     "ms": "^2.1.3",
     "node-fetch": "^2.6.1",
@@ -28,7 +29,9 @@
     "sax": "^1.2.4",
     "webcam-easy": "^1.0.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^7.16.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
