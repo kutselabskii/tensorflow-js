@@ -1,9 +1,20 @@
+import * as tf from '@tensorflow/tfjs';
+
 const enableWebcamButton = document.getElementById('webcamButton');
 const video = document.getElementById('webcam');
 const liveView = document.getElementById('liveView');
 const demosSection = document.getElementById('demos');
 
-var model = undefined;
+const modelButton = document.getElementById('modelButton');
+modelButton.addEventListener('click', modelButtonClicked);
+
+async function modelButtonClicked() {
+  const model2 = await tf.loadLayersModel("file://model/model.json");
+  const prediction = model2.predict([1,99,58,10,0,25.4,0.551,21,0]);
+  console.log(prediction);
+}
+
+var model = undefined
 var children = [];
 
 cocoSsd.load().then(function (loadedModel) {
