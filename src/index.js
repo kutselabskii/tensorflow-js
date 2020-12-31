@@ -9,7 +9,7 @@ const modelButton = document.getElementById('modelButton');
 modelButton.addEventListener('click', modelButtonClicked);
 
 async function modelButtonClicked() {
-  const model2 = await tf.loadLayersModel("file://model/model.json");
+  const model2 = await tf.loadLayersModel("http://localhost:3000/model.json");
   const prediction = model2.predict([1,99,58,10,0,25.4,0.551,21,0]);
   console.log(prediction);
 }
