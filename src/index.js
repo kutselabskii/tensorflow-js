@@ -1,5 +1,10 @@
 import * as tf from '@tensorflow/tfjs';
 
+import logMessage from './js/logger'
+import './css/style.css'
+
+logMessage("Import succeded!");
+
 const enableWebcamButton = document.getElementById('webcamButton');
 const video = document.getElementById('webcam');
 const liveView = document.getElementById('liveView');
