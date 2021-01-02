@@ -7,6 +7,7 @@
   "dependencies": {
     "@tensorflow/tfjs": "^2.7.0",
     "@tensorflow/tfjs-node": "^2.7.0",
+    "cors": "^2.8.5",
     "debug": "^3.2.7",
     "express": "^4.17.1",
     "iconv-lite": "^0.4.24",
@@ -28,6 +29,7 @@
     "safe-buffer": "^5.1.2",
     "safer-buffer": "^2.1.2",
     "sax": "^1.2.4",
+    "tf-model-loader": "0.0.1",
     "webcam-easy": "^1.0.5"
   },
   "devDependencies": {

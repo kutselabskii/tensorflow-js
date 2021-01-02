@@ -6,7 +6,7 @@ import tensorflowjs as tfjs
 from pathlib import Path
 
 datapath = str(Path(__file__).resolve().parent.joinpath('data.csv'))
-modelpath = str(Path(__file__).resolve().parent.joinpath('model'))
+modelpath = str(Path(__file__).resolve().parent.parent.joinpath('public/model'))
 
 dataset = loadtxt(datapath, delimiter=',')
 X = dataset[:, 0:8]

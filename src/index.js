@@ -3,7 +3,7 @@ import * as tf from '@tensorflow/tfjs';
 import logMessage from './js/logger'
 import './css/style.css'
 
-logMessage("Import succeded!");
+// import model from './models/model.json'
 
 const enableWebcamButton = document.getElementById('webcamButton');
 const video = document.getElementById('webcam');
@@ -14,7 +14,7 @@ const modelButton = document.getElementById('modelButton');
 modelButton.addEventListener('click', modelButtonClicked);
 
 async function modelButtonClicked() {
-  const model2 = await tf.loadLayersModel("http://localhost:3000/model.json");
+  const model2 = await tf.loadLayersModel("http://localhost:8080/model/model.json");
   const prediction = model2.predict([1,99,58,10,0,25.4,0.551,21,0]);
   console.log(prediction);
 }
