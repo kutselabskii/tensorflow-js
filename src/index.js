@@ -14,18 +14,18 @@ const modelButton = document.getElementById('modelButton');
 modelButton.addEventListener('click', modelButtonClicked);
 
 async function modelButtonClicked() {
-  const model2 = await tf.loadLayersModel("http://localhost:8080/model/model.json");
-  const prediction = model2.predict([1,99,58,10,0,25.4,0.551,21,0]);
+  const model2 = await tf.loadLayersModel("model.json");
+  const prediction = model2.predict(tf.tensor([1,99,58,10,0,25.4,0.551,21], [1, 8]));
   console.log(prediction);
 }
 
 var model = undefined
 var children = [];
 
-cocoSsd.load().then(function (loadedModel) {
-  model = loadedModel;
-  demosSection.classList.remove('invisible');
-});
+// cocoSsd.load().then(function (loadedModel) {
+//   model = loadedModel;
+//   demosSection.classList.remove('invisible');
+// });
 
 enableWebcamButton.addEventListener('click', buttonClicked);
 
