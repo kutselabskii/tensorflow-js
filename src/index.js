@@ -22,10 +22,10 @@ async function modelButtonClicked() {
 var model = undefined
 var children = [];
 
-// cocoSsd.load().then(function (loadedModel) {
-//   model = loadedModel;
-//   demosSection.classList.remove('invisible');
-// });
+cocoSsd.load().then(function (loadedModel) {
+  model = loadedModel;
+  demosSection.classList.remove('invisible');
+});
 
 enableWebcamButton.addEventListener('click', buttonClicked);
 

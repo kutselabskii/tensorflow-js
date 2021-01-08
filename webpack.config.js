@@ -1,6 +1,7 @@
 const path = require("path")
 const webpack = require('webpack')
 const HtmlWebPackPlugin = require("html-webpack-plugin")
+const CopyPlugin = require("copy-webpack-plugin")
 
 module.exports = {
   entry: {
@@ -46,6 +47,13 @@ module.exports = {
       template: "./src/html/index.html",
       filename: "./index.html",
       excludeChunks: [ 'server' ]
-    })
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: "keraspy/model", to: "./" },
+        { from: "src/server/cert.pem", to: "cert.pem" },
+        { from: "src/server/key.pem", to: "key.pem" },
+      ],
+    }),
   ]
 }
