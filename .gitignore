@@ -263,3 +263,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+senz3d_dataset*
+dataset/

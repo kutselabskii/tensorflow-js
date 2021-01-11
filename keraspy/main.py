@@ -1,32 +1,5 @@
-# from numpy import loadtxt
-# from keras.models import Sequential
-# from keras.layers import Dense
-# import tensorflowjs as tfjs
+from loader import load_dataset
 
-# from pathlib import Path
+x_train, y_train, x_test, y_test = load_dataset()
 
-# datapath = str(Path(__file__).resolve().parent.joinpath('data.csv'))
-# modelpath = str(Path(__file__).resolve().parent.parent.joinpath('public/model'))
-
-# dataset = loadtxt(datapath, delimiter=',')
-# X = dataset[:, 0:8]
-# y = dataset[:, 8]
-
-# model = Sequential()
-# model.add(Dense(12, input_dim=8, activation='relu'))
-# model.add(Dense(8, activation='relu'))
-# model.add(Dense(1, activation='sigmoid'))
-# model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-# model.fit(X, y, epochs=30, batch_size=10)
-
-# _, accuracy = model.evaluate(X, y)
-# print(f'Accuracy: {round(accuracy * 100, 2)}%')
-
-# tfjs.converters.save_keras_model(model, modelpath)
-
-from keras.applications.vgg16 import VGG16
-# load model
-model = VGG16()
-# summarize the model
-model.summary()
+print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
