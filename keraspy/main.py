@@ -13,10 +13,10 @@ def convert_to_one_hot(Y, C):
 
 
 gestures_count = 11
-images_count = 12
-height = 224
-width = 224
-epochs = 10
+images_count = 120
+height = 196
+width = 196
+epochs = 100
 
 x_train, y_train, x_test, y_test = load_dataset(gestures_count, images_count, height, width)
 # print(x_train.shape, y_train.shape)
@@ -40,3 +40,5 @@ model.fit(x_train, y_train, epochs=epochs, batch_size=64)
 preds = model.evaluate(x_test, y_test)
 print("Loss = " + str(preds[0]))
 print("Test Accuracy = " + str(preds[1]))
+
+model.save('my_model.h5')

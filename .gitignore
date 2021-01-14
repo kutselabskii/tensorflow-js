@@ -266,3 +266,5 @@ cython_debug/
 
 senz3d_dataset*
 dataset/
+
+*.h5
