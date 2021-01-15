@@ -268,3 +268,5 @@ senz3d_dataset*
 dataset/
 
 *.h5
+
+keraspy/model
