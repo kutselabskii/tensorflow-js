@@ -51,7 +51,8 @@
   "scripts": {
     "build": "if exist dist rmdir /s /q dist && npx webpack --mode development --config webpack.server.config.js && webpack --mode development",
     "start": "node ./dist/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "go": "npm run build && npm start"
   },
   "repository": {
     "type": "git",
