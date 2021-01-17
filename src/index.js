@@ -5,6 +5,9 @@ import './css/style.css'
 
 // import model from './models/model.json'
 
+const xres = 224;
+const yres = 224;
+
 const enableWebcamButton = document.getElementById('webcamButton');
 const video = document.getElementById('webcam');
 const liveView = document.getElementById('liveView');
@@ -37,8 +40,8 @@ function buttonClicked(event) {
     video.addEventListener('loadeddata', predictWebcam);
 
     webcam = await tf.data.webcam(video, {
-      resizeWidth: 196,
-      resizeHeight: 196,
+      resizeWidth: xres,
+      resizeHeight: yres,
     });
   });
 }
@@ -63,10 +66,10 @@ function indexOfMax(arr) {
 
 async function predictWebcam() {
   var img = await webcam.capture();
-  img = img.reshape([1, 196, 196, 3]);
+  img = img.reshape([1, xres, yres, 3]);
 
   var predictions = model.predict(img);
-  console.log(indexOfMax(predictions));
+  console.log(indexOfMax(predictions.arraySync()[0]));
 
   img.dispose();
     
