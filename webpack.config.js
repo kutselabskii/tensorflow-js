@@ -37,8 +37,11 @@ module.exports = {
         use: [ 'style-loader', 'css-loader' ]
       },
       {
-       test: /\.(png|svg|jpg|gif|json)$/,
-       use: ['file-loader']
+        test: /\.(png|jpg|gif)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+        }
       }
     ]
   },
@@ -52,7 +55,7 @@ module.exports = {
       patterns: [
         { from: "keraspy/model", to: "./" },
         { from: "src/server/cert.pem", to: "cert.pem" },
-        { from: "src/server/key.pem", to: "key.pem" },
+        { from: "src/server/key.pem", to: "key.pem" }
       ],
     }),
   ]

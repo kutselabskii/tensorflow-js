@@ -54,7 +54,25 @@ body {
   display: block;
 }
 
+.video {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .button:hover {
   background-color: #E29578;
+}
+
+.img {
+  /* display: block;
+  float: left; */
+  height: 64px;
+  width: 64px;
+  margin-right: 3px;
+}
+
+.chosen {
+  border: 2px solid green;
 }
   
