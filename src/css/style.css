@@ -67,12 +67,12 @@ body {
 .img {
   /* display: block;
   float: left; */
-  height: 64px;
-  width: 64px;
-  margin-right: 3px;
+  height: 120px;
+  width: 120px;
+  margin-right: 5px;
 }
 
 .chosen {
-  border: 2px solid green;
+  border: 3px solid green;
 }
   
