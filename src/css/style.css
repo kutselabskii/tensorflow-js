@@ -75,4 +75,11 @@ body {
 .chosen {
   border: 3px solid green;
 }
-  
+
+.input_video {
+  position:relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
