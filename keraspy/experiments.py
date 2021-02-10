@@ -1,5 +1,6 @@
 import colorsys
 from PIL import Image
+from PIL.ImageOps import invert
 from pathlib import Path
 import numpy as np
 
@@ -12,7 +13,7 @@ def recolor(o_path, t_path, r_path):
     texpath = Path(__file__).resolve().parent.joinpath(t_path)
     savepath = Path(__file__).resolve().parent.joinpath(r_path)
 
-    image = Image.open(path).convert('HSV')
+    image = invert(Image.open(path)).convert('HSV')
     texture = Image.open(texpath).resize(image.size).convert('HSV')
 
     data = image.load()
