@@ -14,8 +14,8 @@ def sync_shuffle(a, b):
 def load_image(number, height, width, subtype, datadir):
     strnumber = '0' * (6 - len(str(number))) + str(number)
     path = str(datadir.joinpath(f"{strnumber}{subtype}.png"))
-    image = Image.open(path).resize((height, width))
-    data = np.asarray(image)
+    image = Image.open(path).resize((height, width)).convert('RGB')
+    data = np.asarray(image).astype('float32')
     return data
 
 
