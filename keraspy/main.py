@@ -1,6 +1,8 @@
 from pathlib import Path
 
 import segmentation_models as sm
+import tensorflowjs as tfjs
+
 from loader import load_dataset
 
 sm.set_framework('tf.keras')
@@ -10,10 +12,11 @@ save_path = 'segmentation_model.h5'
 BACKBONE = 'resnet34'
 CLASSES = ['sofa']
 LR = 0.0001
+EPOCHS = 40
 
 preprocess_input = sm.get_preprocessing(BACKBONE)
 
-x_train, y_train, x_val, y_val = load_dataset(100, 480, 480)
+x_train, y_train, x_val, y_val = load_dataset(1000, 480, 480)
 
 x_train = preprocess_input(x_train)
 x_val = preprocess_input(x_val)
@@ -33,7 +36,7 @@ model.fit(
    x=x_train,
    y=y_train,
    batch_size=1,
-   epochs=100,
+   epochs=40,
    validation_data=(x_val, y_val),
 )
 
