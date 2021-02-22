@@ -12,11 +12,11 @@ save_path = 'segmentation_model.h5'
 BACKBONE = 'resnet34'
 CLASSES = ['sofa']
 LR = 0.0001
-EPOCHS = 40
+EPOCHS = 100
 
 preprocess_input = sm.get_preprocessing(BACKBONE)
 
-x_train, y_train, x_val, y_val = load_dataset(1000, 480, 480)
+x_train, y_train, x_val, y_val = load_dataset(2000, 480, 480)
 
 x_train = preprocess_input(x_train)
 x_val = preprocess_input(x_val)
