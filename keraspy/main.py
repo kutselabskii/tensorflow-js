@@ -3,7 +3,7 @@ from pathlib import Path
 import segmentation_models as sm
 import tensorflowjs as tfjs
 
-from loader import load_dataset
+from loader import CustomDataset
 
 sm.set_framework('tf.keras')
 modelpath = str(Path(__file__).resolve().parent.joinpath('model'))
@@ -16,7 +16,16 @@ EPOCHS = 100
 
 preprocess_input = sm.get_preprocessing(BACKBONE)
 
-x_train, y_train, x_val, y_val = load_dataset(2000, 480, 480)
+#x_train, y_train, x_val, y_val = load_dataset(2000, 480, 480)
+
+train_iterator = CustomDataset(batch_size=64, count=64*28)
+val_iterator = CustomDataset(batch_size=64, count=64*3, offset=64*28)
+
+print(len(train_iterator))
+print(train_iterator[0])
+quit()
+
+
 
 x_train = preprocess_input(x_train)
 x_val = preprocess_input(x_val)

@@ -1,40 +1,40 @@
 import numpy as np
 from PIL import Image
 from pathlib import Path
+import tensorflow as tf
+import numpy as np
 
 
-path = "D:/Git/NDDS Generated/TestCapturer"
+class CustomDataset(tf.keras.utils.Sequence):
+    def __init__(self, batch_size, count, offset=0, *args, **kwargs):
+        self.batch_size = batch_size
+        self.count = count
+        self.offset = offset
+        self.path = "D:/Git/NDDS Generated/TestCapturer"
 
+    def __len__(self):
+        return self.count // self.batch_size
 
-def sync_shuffle(a, b):
-    p = np.random.permutation(len(a))
-    return np.array(a)[p], np.array(b)[p]
+    def __getitem__(self, index):
+        starter = self.batch_size * index
 
+        X = []
+        y = []
 
-def load_image(number, height, width, subtype, datadir):
-    strnumber = '0' * (6 - len(str(number))) + str(number)
-    path = str(datadir.joinpath(f"{strnumber}{subtype}.png"))
-    image = Image.open(path).resize((height, width)).convert('RGB')
-    data = np.asarray(image).astype('float32')
-    return data
+        for i in range(self.batch_size):
+            number = starter + i
+            X.append(self.load_image(number, ''))
+            y.append(self.load_image(number, '.cs'))
 
+        return np.array(X), np.array(y)
 
-def load_dataset(count, height, width):
-    X, Y = [], []
-    datadir = Path(path)
+    def on_epoch_end(self):
+        pass
 
-    for i in range(count):
-        print(f"{i}/{count}")
-        x = load_image(i, height, width, '', datadir)
-        y = load_image(i, height, width, '.cs', datadir)
-        X.append(x)
-        Y.append(y)
-    X, Y = sync_shuffle(X, Y)
-
-    divider = round(len(X) / 100 * 90)
-    x_train = X[:divider]
-    y_train = Y[:divider]
-    x_test = X[divider:]
-    y_test = Y[divider:]
-
-    return x_train, y_train, x_test, y_test
+    def load_image(self, number, subtype):
+        datadir = Path(self.path)
+        strnumber = '0' * (6 - len(str(number))) + str(number)
+        path = str(datadir.joinpath(f"{strnumber}{subtype}.png"))
+        image = Image.open(path).convert('RGB')
+        data = np.asarray(image).astype('float32')
+        return data
