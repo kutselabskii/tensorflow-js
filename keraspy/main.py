@@ -13,11 +13,12 @@ BACKBONE = 'resnet34'
 CLASSES = ['sofa']
 LR = 0.0001
 EPOCHS = 100
+BATCH_SIZE = 8
 
 preprocess_input = sm.get_preprocessing(BACKBONE)
 
-train_generator = CustomDataset(batch_size=64, count=64*28)
-val_generator = CustomDataset(batch_size=64, count=64*3, offset=64*28)
+train_generator = CustomDataset(batch_size=BATCH_SIZE, count=BATCH_SIZE*28)
+val_generator = CustomDataset(batch_size=BATCH_SIZE, count=BATCH_SIZE*3, offset=BATCH_SIZE*28)
 
 model = sm.Unet(
     BACKBONE,
@@ -32,8 +33,9 @@ model.compile("ADAM", total_loss, metrics)
 model.fit_generator(
    generator=train_generator,
    validation_data=val_generator,
-   use_multiprocessing=True,
-   workers=4,
+   # use_multiprocessing=True,
+   use_multiprocessing=False,
+   workers=2,
    epochs=EPOCHS
 )
 
