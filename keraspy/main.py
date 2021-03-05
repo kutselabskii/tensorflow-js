@@ -19,8 +19,11 @@ BATCH_SIZE = 8
 
 preprocess_input = sm.get_preprocessing(BACKBONE)
 
-train_generator = CustomDataset(batch_size=BATCH_SIZE, count=BATCH_SIZE*28)
-val_generator = CustomDataset(batch_size=BATCH_SIZE, count=BATCH_SIZE*3, offset=BATCH_SIZE*28)
+train_amount = round(2000 * 0.9)
+val_amount = round(2000 * 0.1)
+
+train_generator = CustomDataset(batch_size=BATCH_SIZE, count=train_amount)
+val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, offset=train_amount)
 
 model = sm.Unet(
     BACKBONE,
