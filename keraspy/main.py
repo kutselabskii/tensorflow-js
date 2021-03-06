@@ -37,7 +37,7 @@ model.compile("ADAM", total_loss, metrics)
 
 model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
     filepath=checkpoint_path,
-    monitor='val_iou_score',
+    monitor='val_f1-score',
     mode='max',
     save_best_only=True)
 
