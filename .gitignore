@@ -270,7 +270,7 @@ dataset2/
 
 *.h5
 
-keraspy/model
+keraspy/model/
 gestures_dataset*
 
 github.io/
