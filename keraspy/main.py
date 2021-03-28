@@ -16,11 +16,13 @@ CLASSES = ['sofa']
 LR = 0.0001
 EPOCHS = 100
 BATCH_SIZE = 8
+IMG_COUNT = 2000
+TRAIN_PERCENTAGE = 0.9
 
 preprocess_input = sm.get_preprocessing(BACKBONE)
 
-train_amount = round(2000 * 0.9)
-val_amount = round(2000 * 0.1)
+train_amount = round(IMG_COUNT * TRAIN_PERCENTAGE)
+val_amount = round(IMG_COUNT * (1 - TRAIN_PERCENTAGE))
 
 train_generator = CustomDataset(batch_size=BATCH_SIZE, count=train_amount)
 val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, offset=train_amount)

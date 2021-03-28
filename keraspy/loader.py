@@ -11,6 +11,7 @@ class CustomDataset(tf.keras.utils.Sequence):
         self.count = count
         self.offset = offset
         self.path = "D:/Git/NDDS Generated/TestCapturer"
+        self.cache = {}
 
     def __len__(self):
         return self.count // self.batch_size
@@ -35,6 +36,9 @@ class CustomDataset(tf.keras.utils.Sequence):
         datadir = Path(self.path)
         strnumber = '0' * (6 - len(str(number))) + str(number)
         path = str(datadir.joinpath(f"{strnumber}{subtype}.png"))
+        if path in self.cache.keys():
+            return self.cache[path]
         image = Image.open(path).convert('RGB')
         data = np.asarray(image).astype('float32')
+        self.cache[path] = data
         return data
