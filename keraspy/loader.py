@@ -1,5 +1,5 @@
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageOps
 from pathlib import Path
 import tensorflow as tf
 import numpy as np
@@ -39,6 +39,10 @@ class CustomDataset(tf.keras.utils.Sequence):
         if path in self.cache.keys():
             return self.cache[path]
         image = Image.open(path).convert('RGB')
-        data = np.asarray(image).astype('float32')
+        if subtype != '':
+            image = ImageOps.grayscale(image)
+            data = np.asarray(image).astype('float32') / 255
+        else:
+            data = np.asarray(image).astype('float32')
         self.cache[path] = data
         return data
