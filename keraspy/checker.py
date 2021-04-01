@@ -24,5 +24,6 @@ else:
     data = CustomDataset(batch_size=1, count=100)[5][0]
 
 res = model.predict(data)[0]
-img = Image.fromarray(np.squeeze((res * 255).astype(np.uint8), axis=2))
-img.show()
+img = np.squeeze((res * 255).astype(np.uint8), axis=2)
+plt.imshow(img)
+plt.show()
