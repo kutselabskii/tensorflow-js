@@ -24,6 +24,8 @@ for i in range(amount):
     image = Image.open(path).convert('RGB').resize((480, 480))
     data = np.array([np.asarray(image).astype('float32')])
     res = model.predict(data)[0]
+    res[res >= 0.75] = 1
+    res[res < 0.75] = 0
     img = np.squeeze((res * 255).astype(np.uint8), axis=2)
 
     fig.add_subplot(amount // column_pairs, column_pairs * 2, i * 2 + 1)
