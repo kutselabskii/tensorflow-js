@@ -31,22 +31,11 @@ def recolor(o_path, t_path, r_path):
     texture_image = mpimg.imread(texpath)
     resulting_image = mpimg.imread(savepath)
 
-    # fig = plt.figure()
-    # ax = fig.add_subplot(1, 3, 1)
-    # imgplot = plt.imshow(original_image)
-    # ax.set_title('Original')
-    # ax = fig.add_subplot(1, 3, 2)
-    # imgplot = plt.imshow(texture_image)
-    # ax.set_title('Texture')
-    # ax = fig.add_subplot(1, 3, 3)
-    # imgplot = plt.imshow(resulting_image)
-    # ax.set_title('Result')
-    # plt.show()
 
+if __name__ == '__main__':
+    sofa_amount = 6
+    texture_amount = 6
 
-sofa_amount = 6
-texture_amount = 6
-
-for i in range(1, sofa_amount + 1):
-    for j in range(1, texture_amount + 1):
-        recolor(f"recolor/original/{i}.jpg", f"recolor/texture/{j}.jpg", f"recolor/result/{i}_{j}.jpg")
+    for i in range(1, sofa_amount + 1):
+        for j in range(1, texture_amount + 1):
+            recolor(f"recolor/original/{i}.jpg", f"recolor/texture/{j}.jpg", f"recolor/result/{i}_{j}.jpg")
