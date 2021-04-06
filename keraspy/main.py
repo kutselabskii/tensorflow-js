@@ -34,7 +34,7 @@ model = sm.Unet(
 )
 
 total_loss = sm.losses.binary_focal_dice_loss
-metrics = [sm.metrics.IOUScore(), sm.metrics.FScore()]
+metrics = [sm.metrics.IOUScore(threshold=0.75), sm.metrics.FScore(threshold=0.75)]
 model.compile("ADAM", total_loss, metrics)
 
 model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
