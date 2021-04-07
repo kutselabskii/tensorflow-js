@@ -13,7 +13,7 @@ checkpoint_path = 'checkpoint_model.h5'
 
 BACKBONE = 'resnet34'
 CLASSES = ['sofa']
-LR = 0.0001
+LR = 0.00001
 EPOCHS = 100
 BATCH_SIZE = 8
 IMG_COUNT = 2000
@@ -34,7 +34,7 @@ model = sm.Unet(
 )
 
 total_loss = sm.losses.binary_focal_dice_loss
-metrics = [sm.metrics.IOUScore(threshold=0.75), sm.metrics.FScore(threshold=0.75)]
+metrics = [sm.metrics.IOUScore(threshold=0.5), sm.metrics.FScore(threshold=0.5)]
 model.compile("ADAM", total_loss, metrics)
 
 model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
