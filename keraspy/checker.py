@@ -25,10 +25,10 @@ def recolor(image, mask, texture):
 
 
 use_checkpoint = True
-offset = 20
+offset = 30
 amount = 6
 column_pairs = 1
-confidence_threshold = 0.85
+confidence_threshold = 0.95
 
 texpath = Path(__file__).resolve().parent.joinpath(f"recolor/texture/{1}.jpg")
 texture = Image.open(texpath)
