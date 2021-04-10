@@ -30,7 +30,7 @@ val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, offset=tr
 model = sm.Unet(
     BACKBONE,
     classes=len(CLASSES),
-    encoder_weights='imagenet'
+    encoder_weights=None
 )
 
 total_loss = sm.losses.binary_focal_dice_loss
