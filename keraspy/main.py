@@ -11,7 +11,7 @@ modelpath = str(Path(__file__).resolve().parent.joinpath('model'))
 save_path = 'segmentation_model.h5'
 checkpoint_path = 'checkpoint_model.h5'
 
-BACKBONE = 'resnet50'
+BACKBONE = 'resnet34'
 CLASSES = ['sofa']
 LR = 0.0001
 EPOCHS = 100
@@ -27,7 +27,7 @@ val_amount = round(IMG_COUNT * (1 - TRAIN_PERCENTAGE))
 train_generator = CustomDataset(batch_size=BATCH_SIZE, count=train_amount)
 val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, offset=train_amount)
 
-model = sm.FPN(
+model = sm.Linknet(
     BACKBONE,
     classes=len(CLASSES),
     encoder_weights=None
