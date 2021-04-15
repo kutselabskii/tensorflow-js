@@ -13,7 +13,7 @@ checkpoint_path = 'checkpoint_model.h5'
 
 BACKBONE = 'resnet34'
 CLASSES = ['sofa']
-LR = 0.0001
+LR = 0.001
 EPOCHS = 100
 BATCH_SIZE = 4
 IMG_COUNT = 2000
