@@ -24,7 +24,7 @@ def recolor(image, mask, texture):
     return image
 
 
-use_checkpoint = True
+use_checkpoint = False
 offset = 36
 amount = 12
 column_pairs = 1
@@ -34,7 +34,7 @@ texpath = Path(__file__).resolve().parent.joinpath(f"recolor/texture/{1}.jpg")
 texture = Image.open(texpath)
 
 if use_checkpoint:
-    modelpath = 'checkpoint_model.h5'
+    modelpath = 'checkpoint_model_mine.h5'
 else:
     modelpath = 'segmentation_model.h5'
 
@@ -45,7 +45,7 @@ for i in range(amount):
     current = i + offset
     number = '0' * (8 - len(str(current))) + str(current)
     path = f"D:/Git/tensorflow-js/keraspy/sofa/{number}.jpg"
-    image = Image.open(path).convert('RGB').resize((480, 480))
+    image = Image.open(path).convert('RGB').resize((224, 224))
     data = np.array([np.asarray(image).astype('float32')])
     res = model.predict(data)[0]
     res[res >= confidence_threshold] = 1

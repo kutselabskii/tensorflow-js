@@ -6,12 +6,12 @@ import numpy as np
 
 
 class CustomDataset(tf.keras.utils.Sequence):
-    def __init__(self, batch_size, count, offset=0, *args, **kwargs):
+    def __init__(self, batch_size, count, img_size, offset=0, *args, **kwargs):
         self.batch_size = batch_size
         self.count = count
         self.offset = offset
-        self.path = "D:/Git/NDDS Generated/TestCapturer"
         self.cache = {}
+        self.img_size = img_size
 
     def __len__(self):
         return self.count // self.batch_size
@@ -24,25 +24,24 @@ class CustomDataset(tf.keras.utils.Sequence):
 
         for i in range(self.batch_size):
             number = starter + i
-            X.append(self.load_image(number, ''))
-            y.append(self.load_image(number, '.cs'))
+            X.append(self.load_image(number, 'Originals'))
+            y.append(self.load_image(number, 'Masks'))
 
         return np.array(X), np.array(y)
 
     def on_epoch_end(self):
         pass
 
-    def load_image(self, number, subtype):
-        datadir = Path(self.path)
-        strnumber = '0' * (6 - len(str(number))) + str(number)
-        path = str(datadir.joinpath(f"{strnumber}{subtype}.png"))
+    def load_image(self, number, folder):
+        datadir = Path("D:/Git/SofaDataset")
+        path = str(datadir.joinpath(folder).joinpath(f"{number}.jpg"))
         if path in self.cache.keys():
             return self.cache[path]
-        image = Image.open(path).convert('RGB')
-        if subtype != '':
+        image = Image.open(path).convert('RGB').resize(self.img_size)
+        if folder != 'Originals':
             image = ImageOps.grayscale(image)
-            data = np.asarray(image).astype('float32') / 255
+            data = np.asarray(image).astype('int32') / 255
         else:
-            data = np.asarray(image).astype('float32')
+            data = np.asarray(image).astype('int32') / 255
         self.cache[path] = data
         return data
