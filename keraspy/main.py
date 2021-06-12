@@ -3,6 +3,7 @@ from pathlib import Path
 import tensorflowjs as tfjs
 import tensorflow as tf
 from tensorflow import keras
+from tensorflow.keras.utils import plot_model
 
 from loader import CustomDataset
 import models
@@ -19,7 +20,7 @@ EPOCHS = 100
 BATCH_SIZE = 4
 IMG_COUNT = 900
 TRAIN_PERCENTAGE = 0.92
-IMG_SIZE = (2048, 1024)
+IMG_SIZE = (1024, 512)
 
 train_amount = round(IMG_COUNT * TRAIN_PERCENTAGE)
 val_amount = round(IMG_COUNT * (1 - TRAIN_PERCENTAGE))
@@ -30,14 +31,19 @@ val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, img_size=
 keras.backend.clear_session()
 model = models.get_model(IMG_SIZE)
 
+optimizer = tf.keras.optimizers.SGD(momentum=0.9, lr=0.045)
+# fast_scnn.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)])
+
 model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
     filepath=checkpoint_path,
     monitor='val_mean_io_u',
     mode='max',
     save_best_only=True)
 
-print(model.summary())
-
+# print(model.summary())
+plot_model(model, to_file=str(Path(__file__).resolve().parent.joinpath('model_plot.png')), show_shapes=True, show_layer_names=True)
+quit()
 model.fit(
    train_generator,
    validation_data=val_generator,

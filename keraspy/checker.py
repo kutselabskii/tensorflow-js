@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 
+from models import ResizeLayer
 
 def recolor(image, mask, texture):
     image = image.convert('HSV')
@@ -24,7 +25,7 @@ def recolor(image, mask, texture):
     return image
 
 
-use_checkpoint = False
+use_checkpoint = True
 offset = 36
 amount = 12
 column_pairs = 1
@@ -34,18 +35,19 @@ texpath = Path(__file__).resolve().parent.joinpath(f"recolor/texture/{1}.jpg")
 texture = Image.open(texpath)
 
 if use_checkpoint:
-    modelpath = 'checkpoint_model_mine.h5'
+    # modelpath = 'checkpoint_model_mine.h5'
+    modelpath = "checkpoint_fast_scnn.h5"
 else:
     modelpath = 'segmentation_model.h5'
 
-model = tf.keras.models.load_model(modelpath, compile=False)
+model = tf.keras.models.load_model(modelpath, compile=False, custom_objects={"ResizeLayer": ResizeLayer})
 
 fig = plt.figure()
 for i in range(amount):
     current = i + offset
     number = '0' * (8 - len(str(current))) + str(current)
     path = f"D:/Git/tensorflow-js/keraspy/sofa/{number}.jpg"
-    image = Image.open(path).convert('RGB').resize((224, 224))
+    image = Image.open(path).convert('RGB').resize((512, 1024))
     data = np.array([np.asarray(image).astype('float32')])
     res = model.predict(data)[0]
     res[res >= confidence_threshold] = 1

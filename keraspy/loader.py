@@ -11,7 +11,7 @@ class CustomDataset(tf.keras.utils.Sequence):
         self.count = count
         self.offset = offset
         self.cache = {}
-        self.img_size = img_size
+        self.img_size = (img_size[1], img_size[0])
 
     def __len__(self):
         return self.count // self.batch_size
