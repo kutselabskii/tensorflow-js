@@ -7,6 +7,7 @@ from pathlib import Path
 
 from models import ResizeLayer
 
+
 def recolor(image, mask, texture):
     image = image.convert('HSV')
     texture = texture.resize(image.size).convert('HSV')
@@ -16,7 +17,7 @@ def recolor(image, mask, texture):
 
     for i in range(image.size[0]):
         for j in range(image.size[1]):
-            if mask[j][i] > 0:
+            if mask[j][i][1] > 0:
                 xy = (i, j)
                 pixel = (texdata[i, j][0], texdata[i, j][1], data[i, j][2])
                 image.putpixel(xy, pixel)
@@ -52,9 +53,14 @@ for i in range(amount):
     res = model.predict(data)[0]
     res[res >= confidence_threshold] = 1
     res[res < confidence_threshold] = 0
-    img = np.squeeze((res * 255).astype(np.uint8), axis=2)
+
+    # img = np.squeeze((res * 255).astype(np.uint8), axis=2)
+    img = (res * 255).astype(np.uint8)
 
     recolored = recolor(image, img, texture)
+
+    f = lambda x: x[1]
+    img = np.apply_along_axis(f, 0, img)
 
     fig.add_subplot(amount // column_pairs, column_pairs * 3, i * 3 + 1)
     plt.imshow(image)

@@ -4,6 +4,8 @@ from pathlib import Path
 import tensorflow as tf
 import numpy as np
 
+from tensorflow.keras.utils import to_categorical
+
 
 class CustomDataset(tf.keras.utils.Sequence):
     def __init__(self, batch_size, count, img_size, offset=0, *args, **kwargs):
@@ -11,6 +13,7 @@ class CustomDataset(tf.keras.utils.Sequence):
         self.count = count
         self.offset = offset
         self.cache = {}
+        # self.img_size = (img_size[1], img_size[0])
         self.img_size = (img_size[1], img_size[0])
 
     def __len__(self):
@@ -40,8 +43,10 @@ class CustomDataset(tf.keras.utils.Sequence):
         image = Image.open(path).convert('RGB').resize(self.img_size)
         if folder != 'Originals':
             image = ImageOps.grayscale(image)
-            data = np.asarray(image).astype('int32') / 255
+            data = np.asarray(image).astype('int32') // 255
+            f = lambda x: to_categorical(x, num_classes=2)
+            data = np.apply_along_axis(f, 1, data)
         else:
-            data = np.asarray(image).astype('int32') / 255
+            data = np.asarray(image).astype('int32') // 255
         self.cache[path] = data
         return data

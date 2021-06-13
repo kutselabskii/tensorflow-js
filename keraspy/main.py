@@ -32,18 +32,19 @@ keras.backend.clear_session()
 model = models.get_model(IMG_SIZE)
 
 optimizer = tf.keras.optimizers.SGD(momentum=0.9, lr=0.045)
-# fast_scnn.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
-model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)])
+model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+# model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)], run_eagerly=True)
 
 model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
     filepath=checkpoint_path,
-    monitor='val_mean_io_u',
+    # monitor='val_mean_io_u',
+    monitor='val_accuracy',
     mode='max',
     save_best_only=True)
 
 # print(model.summary())
 plot_model(model, to_file=str(Path(__file__).resolve().parent.joinpath('model_plot.png')), show_shapes=True, show_layer_names=True)
-quit()
+
 model.fit(
    train_generator,
    validation_data=val_generator,
