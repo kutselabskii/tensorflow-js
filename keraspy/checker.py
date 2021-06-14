@@ -27,9 +27,8 @@ def recolor(image, mask, texture):
 
 
 use_checkpoint = True
-offset = 36
+offset = 60
 amount = 12
-column_pairs = 1
 confidence_threshold = 0.95
 
 texpath = Path(__file__).resolve().parent.joinpath(f"recolor/texture/{1}.jpg")
@@ -59,15 +58,13 @@ for i in range(amount):
 
     recolored = recolor(image, img, texture)
 
-    f = lambda x: x[1]
-    img = np.apply_along_axis(f, 0, img)
+    # f = lambda x: x[1]
+    # img = np.apply_along_axis(f, 0, img)
 
-    fig.add_subplot(amount // column_pairs, column_pairs * 3, i * 3 + 1)
-    plt.imshow(image)
-    fig.add_subplot(amount // column_pairs, column_pairs * 3, i * 3 + 2)
-    plt.imshow(img)
-    fig.add_subplot(amount // column_pairs, column_pairs * 3, i * 3 + 3)
-    plt.imshow(recolored)
+    fig.add_subplot(amount, 1, i + 1)
+    plt.imshow(np.hstack((image, recolored)))
+    # fig.add_subplot(amount // column_pairs, column_pairs * 3, i * 3 + 2)
+    # plt.imshow(img)
 
 fig.tight_layout()
 plt.show()
