@@ -31,7 +31,8 @@ val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, img_size=
 keras.backend.clear_session()
 model = models.get_model(IMG_SIZE)
 
-optimizer = tf.keras.optimizers.SGD(momentum=0.9, lr=0.045)
+# optimizer = tf.keras.optimizers.SGD(momentum=0.9, lr=0.045)
+optimizer = tf.keras.optimizers.Adam(learning_rate=LR)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 # model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)], run_eagerly=True)
 
