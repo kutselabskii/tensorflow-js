@@ -27,8 +27,13 @@ class CustomDataset(tf.keras.utils.Sequence):
 
         for i in range(self.batch_size):
             number = starter + i
-            X.append(self.load_image(number, 'Originals'))
-            y.append(self.load_image(number, 'Masks'))
+
+            if number < 900:
+                X.append(self.load_image(number, 'Originals'))
+                y.append(self.load_image(number, 'Masks'))
+            else:
+                X.append(self.load_image(number - 900, 'AugmentedOriginals'))
+                y.append(self.load_image(number - 900, 'AugmentedMasks'))
 
         return np.array(X), np.array(y)
 
@@ -41,7 +46,7 @@ class CustomDataset(tf.keras.utils.Sequence):
         if path in self.cache.keys():
             return self.cache[path]
         image = Image.open(path).convert('RGB').resize(self.img_size)
-        if folder != 'Originals':
+        if folder != 'Originals' and folder != 'AugmentedOriginals':
             image = ImageOps.grayscale(image)
             data = np.asarray(image).astype('int32') // 255
             f = lambda x: to_categorical(x, num_classes=2)
