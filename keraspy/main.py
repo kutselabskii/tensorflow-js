@@ -15,12 +15,12 @@ checkpoint_path = 'checkpoint_fast_scnn.h5'
 
 BACKBONE = 'resnet34'
 CLASSES = ['sofa']
-LR = 0.001
-EPOCHS = 100
+LR = 0.01
+EPOCHS = 40
 BATCH_SIZE = 4
 IMG_COUNT = 3600
 TRAIN_PERCENTAGE = 0.92
-IMG_SIZE = (1024, 512)
+IMG_SIZE = (512, 256)
 
 train_amount = round(IMG_COUNT * TRAIN_PERCENTAGE)
 val_amount = round(IMG_COUNT * (1 - TRAIN_PERCENTAGE))

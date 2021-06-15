@@ -61,10 +61,8 @@ def bottleneck_block(inputs, filters, kernel, t, strides, n, index):
 
 def pyramid_pooling_block(input_tensor, bin_sizes):
     concat_list = [input_tensor]
-    # w = 64
-    # h = 32
-    w = 32
-    h = 16
+    w = 16
+    h = 8
 
     for bin_size in bin_sizes:
         x = tf.keras.layers.AveragePooling2D(pool_size=(w//bin_size, h//bin_size), strides=(w//bin_size, h//bin_size))(input_tensor)
