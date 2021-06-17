@@ -10,8 +10,8 @@ import models
 
 
 modelpath = str(Path(__file__).resolve().parent.joinpath('model'))
-save_path = 'fast_scnn.h5'
-checkpoint_path = 'checkpoint_fast_scnn.h5'
+save_path = 'fast_scnn_layers.h5'
+checkpoint_path = 'checkpoint_fast_scnn_layers.h5'
 
 BACKBONE = 'resnet34'
 CLASSES = ['sofa']

@@ -35,9 +35,9 @@ texpath = Path(__file__).resolve().parent.joinpath(f"recolor/texture/{1}.jpg")
 texture = Image.open(texpath)
 
 if use_checkpoint:
-    modelpath = "checkpoint_fast_scnn.h5"
+    modelpath = "checkpoint_fast_scnn_layers.h5"
 else:
-    modelpath = 'fast_scnn.h5'
+    modelpath = 'fast_scnn_layers.h5'
 
 model = tf.keras.models.load_model(modelpath, compile=False, custom_objects={"ResizeLayer": ResizeLayer})
 
