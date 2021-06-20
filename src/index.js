@@ -66,9 +66,10 @@ function recolor(image, mask) {
   for (let i = 0; i < 512; ++i) {
     for (let j = 0; j < 256; ++j) {
       if (mask[0][i][j][1] > 0.5) {
-        image[0][i][j] = 0;
+        image[0][i][j] = [0, 0, 0];
       } else {
-        image[0][i][j] = image[0][i][j] / 255;
+        const img = image[0][i][j];
+        image[0][i][j] = [img[0] / 255, img[1] / 255, img[2] / 255];
       }
     }
   }
@@ -82,13 +83,16 @@ async function predictWebcam() {
 
   var img = await webcam.capture();
   img = img.reshape([1, 512, 256, 3]);
-
   var predictions = model.predict(img);
 
   const recolored = recolor(img.arraySync(), predictions.arraySync());
   // canvasCtx.drawImage(recolored, 0, 0, width, height);
 
-  tf.browser.toPixels(tf.squeeze(recolored), canvasElement);
+  // console.log(recolored);
+
+  const drawer = tf.squeeze(tf.tensor(recolored));
+  // console.log(drawer);
+  tf.browser.toPixels(drawer, canvasElement);
 
   window.requestAnimationFrame(predictWebcam);
 

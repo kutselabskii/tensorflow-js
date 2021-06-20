@@ -35,8 +35,8 @@ class ResizeLayer(tf.keras.layers.Layer):
 
 def conv_block(inputs, conv_type, kernel, kernel_size, strides, padding='same', name="", relu=True):
     if(conv_type == 'ds'):
-        x = tf.keras.layers.SeparableConv2D(kernel, kernel_size, padding=padding, strides=strides, name=f"{name}_SeparableConv")(inputs)
-        #x = tf.keras.layers.Conv2D(kernel, kernel_size, padding=padding, strides=strides, name=f"{name}_SeparableConv")(inputs)
+        # x = tf.keras.layers.SeparableConv2D(kernel, kernel_size, padding=padding, strides=strides, name=f"{name}_SeparableConv")(inputs)
+        x = tf.keras.layers.Conv2D(kernel, kernel_size, padding=padding, strides=strides, name=f"{name}_SeparableConv")(inputs)
     else:
         x = tf.keras.layers.Conv2D(kernel, kernel_size, padding=padding, strides=strides, name=f"{name}_Conv")(inputs)  
 
@@ -106,8 +106,8 @@ def get_model(size):
     # Step 3: Feature Fusion
     ff_layer1 = conv_block(lds_layer, 'conv', 128, (1, 1), padding='same', strides=(1, 1), name="Feature_Fusion", relu=False)
     ff_layer2 = tf.keras.layers.UpSampling2D((4, 4))(gfe_layer)
-    ff_layer2 = tf.keras.layers.SeparableConv2D(128, (3, 3), padding='same', strides=(1, 1), activation=None, dilation_rate=(4, 4))(ff_layer2)
-    #ff_layer2 = tf.keras.layers.Conv2D(128, (3, 3), padding='same', strides=(1, 1), activation=None, dilation_rate=(4, 4))(ff_layer2)
+    # ff_layer2 = tf.keras.layers.SeparableConv2D(128, (3, 3), padding='same', strides=(1, 1), activation=None, dilation_rate=(4, 4))(ff_layer2)
+    ff_layer2 = tf.keras.layers.Conv2D(128, (3, 3), padding='same', strides=(1, 1), activation=None, dilation_rate=(4, 4))(ff_layer2)
 
     # old approach with DepthWiseConv2d
     #ff_layer2 = tf.keras.layers.DepthwiseConv2D((3,3), strides=(1, 1), depth_multiplier=1, padding='same')(ff_layer2)
@@ -121,13 +121,13 @@ def get_model(size):
     ff_final = tf.keras.layers.ReLU()(ff_final)
 
     # Step 4: Classifier
-    classifier = tf.keras.layers.SeparableConv2D(128, (3, 3), padding='same', strides=(1, 1), name='DSConv1_classifier')(ff_final)
-    #classifier = tf.keras.layers.Conv2D(128, (3, 3), padding='same', strides=(1, 1), name='DSConv1_classifier')(ff_final)
+    # classifier = tf.keras.layers.SeparableConv2D(128, (3, 3), padding='same', strides=(1, 1), name='DSConv1_classifier')(ff_final)
+    classifier = tf.keras.layers.Conv2D(128, (3, 3), padding='same', strides=(1, 1), name='DSConv1_classifier')(ff_final)
     classifier = tf.keras.layers.BatchNormalization()(classifier)
     classifier = tf.keras.layers.ReLU()(classifier)
 
-    classifier = tf.keras.layers.SeparableConv2D(128, (3, 3), padding='same', strides=(1, 1), name='DSConv2_classifier')(classifier)
-    #classifier = tf.keras.layers.Conv2D(128, (3, 3), padding='same', strides=(1, 1), name='DSConv2_classifier')(classifier)
+    # classifier = tf.keras.layers.SeparableConv2D(128, (3, 3), padding='same', strides=(1, 1), name='DSConv2_classifier')(classifier)
+    classifier = tf.keras.layers.Conv2D(128, (3, 3), padding='same', strides=(1, 1), name='DSConv2_classifier')(classifier)
     classifier = tf.keras.layers.BatchNormalization()(classifier)
     classifier = tf.keras.layers.ReLU()(classifier)
 

@@ -6,6 +6,10 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 from models import ResizeLayer
+from datetime import datetime
+
+
+today = datetime.today().strftime('%Y-%m-%d')
 
 
 def recolor(image, mask, texture):
@@ -26,18 +30,18 @@ def recolor(image, mask, texture):
     return image
 
 
-use_checkpoint = False
-offset = 150
+use_checkpoint = True
+offset = 170
 amount = 4
-confidence_threshold = 0.95
+confidence_threshold = 0.25
 
 texpath = Path(__file__).resolve().parent.joinpath(f"recolor/texture/{1}.jpg")
 texture = Image.open(texpath)
 
 if use_checkpoint:
-    modelpath = "checkpoint_fast_scnn_layers.h5"
+    modelpath = f"unused_models/{today}/checkpoint_fast_scnn_layers.h5"
 else:
-    modelpath = 'fast_scnn_layers.h5'
+    modelpath = f'unused_models/{today}/fast_scnn_layers.h5'
 
 model = tf.keras.models.load_model(modelpath, compile=False, custom_objects={"ResizeLayer": ResizeLayer})
 
