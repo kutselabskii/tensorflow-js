@@ -1,63 +1,96 @@
-// import * as tf from '@tensorflow/tfjs';
-// import './css/style.css'
+import * as tf from '@tensorflow/tfjs';
+import './css/style.css'
 
-// const enableWebcamButton = document.getElementById('webcamButton');
-// const video = document.getElementById('webcam');
-// const demosSection = document.getElementById('demos');
-// const modelButton = document.getElementById('modelButton');
-// var model = undefined;
-// var webcam = undefined
+class ResizeLayer extends tf.layers.Layer {
+    constructor(config) {
+          super(config);
+      this.w = config.w;
+      this.h = config.h;
+      }
+  
+    call(input) {
+      return tf.tidy(() => {
+        return tf.image.resizeBilinear(input[0], [this.w, this.h]);
+      });
+      }
+  
+    computeOutputShape(input_shape) {
+      return [input_shape[0], this.w, this.h, input_shape[3]]
+    }
+  
+    static get className() {
+      return 'ResizeLayer';
+    }
+  }
 
-// modelButton.addEventListener('click', modelButtonClicked);
 
-// async function modelButtonClicked() {
-//   model = await tf.loadLayersModel("model.json");
-//   modelButton.setAttribute('display', 'none');
-//   demosSection.classList.remove('invisible');
-// }
+const enableWebcamButton = document.getElementById('webcamButton');
+const video = document.getElementById('webcam');
+const canvasElement = document.getElementsByClassName('output_canvas')[0];
+const canvasCtx = canvasElement.getContext('2d');
+const demosSection = document.getElementById('demos');
+const modelButton = document.getElementById('modelButton');
+var model = undefined;
+var webcam = undefined
 
-// enableWebcamButton.addEventListener('click', buttonClicked);
+modelButton.addEventListener('click', modelButtonClicked);
 
-// function buttonClicked(event) {
-//   event.target.classList.add('removed');
-//   enableWebcamButton.setAttribute('display', 'none');
+async function modelButtonClicked() {
+  tf.serialization.registerClass(ResizeLayer);
+  model = await tf.loadLayersModel("model.json");
+  modelButton.setAttribute('display', 'none');
+  demosSection.classList.remove('invisible');
+}
 
-//   const constraints = {
-//     video: true
-//   };
-//   navigator.mediaDevices.getUserMedia(constraints).then(async function(stream) {
-//     video.srcObject = stream;
-//     video.addEventListener('loadeddata', predictWebcam);
+enableWebcamButton.addEventListener('click', buttonClicked);
 
-//     webcam = await tf.data.webcam(video, {
-//       resizeWidth: 196,
-//       resizeHeight: 196,
-//     });
-//   });
-// }
+function buttonClicked(event) {
+  event.target.classList.add('removed');
+  enableWebcamButton.setAttribute('display', 'none');
 
-// function indexOfMax(arr) {
-//   if (arr.length === 0) {
-//       return -1;
-//   }
-//   var max = arr[0];
-//   var maxIndex = 0;
-//   for (var i = 1; i < arr.length; i++) {
-//       if (arr[i] > max) {
-//           maxIndex = i;
-//           max = arr[i];
-//       }
-//   }
-//   return maxIndex;
-// }
+  const constraints = {
+    video: true
+  };
+  navigator.mediaDevices.getUserMedia(constraints).then(async function(stream) {
+    video.srcObject = stream;
+    video.addEventListener('loadeddata', predictWebcam);
 
-// async function predictWebcam() {
-//   // var img = await webcam.capture();
-//   // img = img.reshape([1, 196, 196, 3]);
+    webcam = await tf.data.webcam(video, {
+      resizeWidth: 256,
+      resizeHeight: 512,
+    });
+  });
+}
 
-//   // var predictions = model.predict(img);
-//   // console.log(indexOfMax(predictions));
+function recolor(image, mask) {
+  for (let i = 0; i < 512; ++i) {
+    for (let j = 0; j < 256; ++j) {
+      if (mask[0][i][j][1] > 0.5) {
+        image[0][i][j] = 0;
+      } else {
+        image[0][i][j] = image[0][i][j] / 255;
+      }
+    }
+  }
+  return image;
+}
 
-//     // Call this function again to keep predicting when the browser is ready.
-//     window.requestAnimationFrame(predictWebcam);
-// } 
+async function predictWebcam() {
+  if (webcam === undefined) {
+    return;
+  }
+
+  var img = await webcam.capture();
+  img = img.reshape([1, 512, 256, 3]);
+
+  var predictions = model.predict(img);
+
+  const recolored = recolor(img.arraySync(), predictions.arraySync());
+  // canvasCtx.drawImage(recolored, 0, 0, width, height);
+
+  tf.browser.toPixels(tf.squeeze(recolored), canvasElement);
+
+  window.requestAnimationFrame(predictWebcam);
+
+  img.dispose();
+} 

@@ -26,7 +26,7 @@ def recolor(image, mask, texture):
     return image
 
 
-use_checkpoint = True
+use_checkpoint = False
 offset = 150
 amount = 4
 confidence_threshold = 0.95
