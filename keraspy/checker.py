@@ -30,10 +30,10 @@ def recolor(image, mask, texture):
     return image
 
 
-use_checkpoint = True
-offset = 170
+use_checkpoint = False
+offset = 600
 amount = 4
-confidence_threshold = 0.25
+confidence_threshold = 0.5
 
 texpath = Path(__file__).resolve().parent.joinpath(f"recolor/texture/{1}.jpg")
 texture = Image.open(texpath)
@@ -50,7 +50,7 @@ for i in range(amount):
     current = i + offset
     number = '0' * (8 - len(str(current))) + str(current)
     path = f"D:/Git/tensorflow-js/keraspy/sofa/{number}.jpg"
-    image = Image.open(path).convert('RGB').resize((256, 512))
+    image = Image.open(path).convert('RGB').resize((256, 256))
     data = np.array([np.asarray(image).astype('float32')])
     res = model.predict(data)[0]
     res[res >= confidence_threshold] = 1

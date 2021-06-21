@@ -75,7 +75,7 @@ def bottleneck_block(inputs, filters, kernel, t, strides, n, index):
 
 def pyramid_pooling_block(input_tensor, bin_sizes):
     concat_list = [input_tensor]
-    w = 16
+    w = 8
     h = 8
 
     for bin_size in bin_sizes:

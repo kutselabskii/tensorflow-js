@@ -21,24 +21,26 @@ path = f'unused_models/{today}/'
 
 BACKBONE = 'resnet34'
 CLASSES = ['sofa']
-LR = 0.01
-EPOCHS = 200
-BATCH_SIZE = 32
-IMG_COUNT = 3600
+LR = 0.045
+EPOCHS = 300
+BATCH_SIZE = 24
+IMG_COUNT = 9000
 TRAIN_PERCENTAGE = 0.92
-IMG_SIZE = (512, 256)
+IMG_SIZE = (256, 256)
 
 train_amount = round(IMG_COUNT * TRAIN_PERCENTAGE)
 val_amount = round(IMG_COUNT * (1 - TRAIN_PERCENTAGE))
 
 train_generator = CustomDataset(batch_size=BATCH_SIZE, count=train_amount, img_size=IMG_SIZE)
-val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, img_size=IMG_SIZE)
+val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, img_size=IMG_SIZE, offset=1500)
 
 keras.backend.clear_session()
 model = models.get_model(IMG_SIZE)
 
-optimizer = tf.keras.optimizers.SGD(momentum=0.9, lr=0.045)
+optimizer = tf.keras.optimizers.SGD(momentum=0.9, lr=LR)
+# optimizer = tf.keras.optimizers.Adamax(learning_rate=LR)
 # optimizer = tf.keras.optimizers.Adam(learning_rate=LR)
+# model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 # model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)], run_eagerly=True)
 
@@ -56,7 +58,10 @@ history = model.fit(
    train_generator,
    validation_data=val_generator,
    epochs=EPOCHS,
-   callbacks=[model_checkpoint_callback]
+   callbacks=[
+       model_checkpoint_callback,
+       tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=5)
+    ]
 )
 
 model.save(save_path)
@@ -67,5 +72,5 @@ preds = model.evaluate(test_x, test_y)
 print("Loss = " + str(preds[0]))
 print("Test Accuracy = " + str(preds[1]))
 
-np.savetxt(path + "loss_history.txt", np.array(history["loss"]), delimiter=",")
-np.savetxt(path + "accuracy_history.txt", np.array(history["accuracy"]), delimiter=",")
+np.savetxt(path + "loss_history.txt", np.array(history.history["val_loss"]), delimiter=",")
+np.savetxt(path + "accuracy_history.txt", np.array(history.history["val_accuracy"]), delimiter=",")

@@ -49,7 +49,11 @@ function buttonClicked(event) {
   enableWebcamButton.setAttribute('display', 'none');
 
   const constraints = {
-    video: true
+    video: {
+      width: 256,
+      height: 512,
+      facingMode: 'environment'
+    }
   };
   navigator.mediaDevices.getUserMedia(constraints).then(async function(stream) {
     video.srcObject = stream;

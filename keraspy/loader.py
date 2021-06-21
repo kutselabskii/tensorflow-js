@@ -20,7 +20,7 @@ class CustomDataset(tf.keras.utils.Sequence):
         return self.count // self.batch_size
 
     def __getitem__(self, index):
-        starter = self.batch_size * index
+        starter = self.offset + self.batch_size * index
 
         X = []
         y = []
@@ -49,8 +49,8 @@ class CustomDataset(tf.keras.utils.Sequence):
         if folder != 'Originals' and folder != 'AugmentedOriginals':
             image = ImageOps.grayscale(image)
             data = np.asarray(image).astype('int32') // 255
-            f = lambda x: to_categorical(x, num_classes=2)
-            data = np.apply_along_axis(f, 1, data)
+            # f = lambda x: to_categorical(x, num_classes=2)
+            # data = np.apply_along_axis(f, 1, data)
         else:
             data = np.asarray(image).astype('int32') // 255
         self.cache[path] = data
