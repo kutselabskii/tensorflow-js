@@ -48,10 +48,10 @@ class CustomDataset(tf.keras.utils.Sequence):
         image = Image.open(path).convert('RGB').resize(self.img_size)
         if folder != 'Originals' and folder != 'AugmentedOriginals':
             image = ImageOps.grayscale(image)
-            data = np.asarray(image).astype('int32') // 255
+            data = np.asarray(image).astype('float32') / 255
             # f = lambda x: to_categorical(x, num_classes=2)
             # data = np.apply_along_axis(f, 1, data)
         else:
-            data = np.asarray(image).astype('int32') // 255
+            data = np.asarray(image).astype('float32') / 255
         self.cache[path] = data
         return data

@@ -10,7 +10,8 @@ from datetime import datetime
 
 
 today = datetime.today().strftime('%Y-%m-%d')
-
+suffix = "_iou"
+# suffix = ""
 
 def recolor(image, mask, texture):
     image = image.convert('HSV')
@@ -21,7 +22,7 @@ def recolor(image, mask, texture):
 
     for i in range(image.size[0]):
         for j in range(image.size[1]):
-            if mask[j][i][1] > 0:
+            if mask[j][i] > 0:
                 xy = (i, j)
                 pixel = (texdata[i, j][0], texdata[i, j][1], data[i, j][2])
                 image.putpixel(xy, pixel)
@@ -31,7 +32,7 @@ def recolor(image, mask, texture):
 
 
 use_checkpoint = False
-offset = 600
+offset = 334
 amount = 4
 confidence_threshold = 0.5
 
@@ -39,9 +40,10 @@ texpath = Path(__file__).resolve().parent.joinpath(f"recolor/texture/{1}.jpg")
 texture = Image.open(texpath)
 
 if use_checkpoint:
-    modelpath = f"unused_models/{today}/checkpoint_fast_scnn_layers.h5"
+    modelpath = f"unused_models/{today}/checkpoint_fast_scnn_binary{suffix}.h5"
 else:
-    modelpath = f'unused_models/{today}/fast_scnn_layers.h5'
+    modelpath = f'unused_models/{today}/fast_scnn_binary{suffix}.h5'
+print(modelpath)
 
 model = tf.keras.models.load_model(modelpath, compile=False, custom_objects={"ResizeLayer": ResizeLayer})
 
@@ -50,7 +52,7 @@ for i in range(amount):
     current = i + offset
     number = '0' * (8 - len(str(current))) + str(current)
     path = f"D:/Git/tensorflow-js/keraspy/sofa/{number}.jpg"
-    image = Image.open(path).convert('RGB').resize((256, 256))
+    image = Image.open(path).convert('RGB').resize((512, 512))
     data = np.array([np.asarray(image).astype('float32')])
     res = model.predict(data)[0]
     res[res >= confidence_threshold] = 1

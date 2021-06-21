@@ -1,6 +1,8 @@
 import * as tf from '@tensorflow/tfjs';
 import './css/style.css'
 
+import i1 from './img/1.jpg';
+
 class ResizeLayer extends tf.layers.Layer {
     constructor(config) {
           super(config);
@@ -33,6 +35,15 @@ const modelButton = document.getElementById('modelButton');
 var model = undefined;
 var webcam = undefined
 
+var imageTensor = undefined;
+const image = new Image();
+image.crossOrigin = 'anonymous';
+image.src = i1;
+image.onload = () => {
+  imageTensor = tf.browser.fromPixels(image);
+  imageTensor = tf.image.resizeBilinear(imageTensor, [512, 512]).arraySync();
+}
+
 modelButton.addEventListener('click', modelButtonClicked);
 
 async function modelButtonClicked() {
@@ -50,7 +61,7 @@ function buttonClicked(event) {
 
   const constraints = {
     video: {
-      width: 256,
+      width: 512,
       height: 512,
       facingMode: 'environment'
     }
@@ -60,7 +71,7 @@ function buttonClicked(event) {
     video.addEventListener('loadeddata', predictWebcam);
 
     webcam = await tf.data.webcam(video, {
-      resizeWidth: 256,
+      resizeWidth: 512,
       resizeHeight: 512,
     });
   });
@@ -68,9 +79,9 @@ function buttonClicked(event) {
 
 function recolor(image, mask) {
   for (let i = 0; i < 512; ++i) {
-    for (let j = 0; j < 256; ++j) {
-      if (mask[0][i][j][1] > 0.5) {
-        image[0][i][j] = [0, 0, 0];
+    for (let j = 0; j < 512; ++j) {
+      if (true || mask[0][i][j][1] > 0.5) {
+        image[0][i][j] = [imageTensor[i][j][0] / 255, imageTensor[i][j][1] / 255, imageTensor[i][j][2] / 255];
       } else {
         const img = image[0][i][j];
         image[0][i][j] = [img[0] / 255, img[1] / 255, img[2] / 255];
@@ -86,7 +97,7 @@ async function predictWebcam() {
   }
 
   var img = await webcam.capture();
-  img = img.reshape([1, 512, 256, 3]);
+  img = img.reshape([1, 512, 512, 3]);
   var predictions = model.predict(img);
 
   const recolored = recolor(img.arraySync(), predictions.arraySync());

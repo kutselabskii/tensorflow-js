@@ -75,8 +75,8 @@ def bottleneck_block(inputs, filters, kernel, t, strides, n, index):
 
 def pyramid_pooling_block(input_tensor, bin_sizes):
     concat_list = [input_tensor]
-    w = 8
-    h = 8
+    w = 16
+    h = 16
 
     for bin_size in bin_sizes:
         x = tf.keras.layers.AveragePooling2D(pool_size=(w//bin_size, h//bin_size), strides=(w//bin_size, h//bin_size))(input_tensor)
@@ -131,11 +131,12 @@ def get_model(size):
     classifier = tf.keras.layers.BatchNormalization()(classifier)
     classifier = tf.keras.layers.ReLU()(classifier)
 
-    classifier = conv_block(classifier, 'conv', 2, (1, 1), strides=(1, 1), padding='same', name="Final_reducing_convolution", relu=False)
+    classifier = conv_block(classifier, 'conv', 1, (1, 1), strides=(1, 1), padding='same', name="Final_reducing_convolution", relu=False)
     classifier = tf.keras.layers.Dropout(0.3)(classifier)
 
     classifier = tf.keras.layers.UpSampling2D((8, 8))(classifier)
-    classifier = tf.keras.layers.Softmax()(classifier)
+    # classifier = tf.keras.layers.Softmax()(classifier)
+    classifier = tf.keras.layers.Activation("sigmoid")(classifier)
 
     # Result
     fast_scnn = tf.keras.Model(inputs=input_layer, outputs=classifier, name='Fast_SCNN')
