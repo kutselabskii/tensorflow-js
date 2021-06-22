@@ -49,6 +49,7 @@ class CustomDataset(tf.keras.utils.Sequence):
         if folder != 'Originals' and folder != 'AugmentedOriginals':
             image = ImageOps.grayscale(image)
             data = np.asarray(image).astype('float32') / 255
+            # data = 1 - np.asarray(image).astype('float32') / 255
             # f = lambda x: to_categorical(x, num_classes=2)
             # data = np.apply_along_axis(f, 1, data)
         else:

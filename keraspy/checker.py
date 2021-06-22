@@ -10,7 +10,7 @@ from datetime import datetime
 
 
 today = datetime.today().strftime('%Y-%m-%d')
-suffix = "_iou"
+suffix = "linknet_straight"
 # suffix = ""
 
 def recolor(image, mask, texture):
@@ -22,7 +22,7 @@ def recolor(image, mask, texture):
 
     for i in range(image.size[0]):
         for j in range(image.size[1]):
-            if mask[j][i] > 0:
+            if mask[j][i] == 0:
                 xy = (i, j)
                 pixel = (texdata[i, j][0], texdata[i, j][1], data[i, j][2])
                 image.putpixel(xy, pixel)
@@ -31,8 +31,8 @@ def recolor(image, mask, texture):
     return image
 
 
-use_checkpoint = False
-offset = 334
+use_checkpoint = True
+offset = 338
 amount = 4
 confidence_threshold = 0.5
 
@@ -52,7 +52,7 @@ for i in range(amount):
     current = i + offset
     number = '0' * (8 - len(str(current))) + str(current)
     path = f"D:/Git/tensorflow-js/keraspy/sofa/{number}.jpg"
-    image = Image.open(path).convert('RGB').resize((512, 512))
+    image = Image.open(path).convert('RGB').resize((128, 128))
     data = np.array([np.asarray(image).astype('float32')])
     res = model.predict(data)[0]
     res[res >= confidence_threshold] = 1

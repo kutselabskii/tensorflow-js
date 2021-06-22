@@ -63,7 +63,7 @@ function buttonClicked(event) {
     video: {
       width: 512,
       height: 512,
-      facingMode: 'environment'
+      // facingMode: 'environment'
     }
   };
   navigator.mediaDevices.getUserMedia(constraints).then(async function(stream) {

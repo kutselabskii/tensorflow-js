@@ -31,12 +31,13 @@ for i in range(IMAGE_COUNT):
     seq.add(iaa.SigmoidContrast(gain=(5, 20), cutoff=(0.3, 0.75), per_channel=True))
     seq.add(iaa.HorizontalFlip())
     seq.add(iaa.VerticalFlip())
-    seq.add(iaa.TranslateX(percent=(-0.7, 0.7), mode='edge'))
-    seq.add(iaa.TranslateY(percent=(-0.7, 0.7), mode='edge'))
-    seq.add(iaa.Rotate(random.randrange(-60, 60), mode='edge'))
-    seq.add(iaa.ScaleX((0.5, 1.5), mode='edge'))
-    seq.add(iaa.ScaleY((0.5, 1.5), mode='edge'))
+    seq.add(iaa.TranslateX(percent=(-0.7, 0.7), cval=33))
+    seq.add(iaa.TranslateY(percent=(-0.7, 0.7), cval=33))
+    seq.add(iaa.Rotate(random.randrange(-60, 60), cval=33))
+    seq.add(iaa.ScaleX((0.5, 1.5), cval=33))
+    seq.add(iaa.ScaleY((0.5, 1.5), cval=33))
     seq.add(iaa.imgcorruptlike.DefocusBlur(severity=1))
+    aug = iaa.CropAndPad(percent=([-0.3, 0.3], [-0.3, 0.3], [-0.3, 0.3], [-0.3, 0.3]))
 
     results_o, results_m = seq(image=original, segmentation_maps=mask)
 
