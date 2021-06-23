@@ -6,6 +6,8 @@ import tensorflowjs as tfjs
 from models import ResizeLayer
 from datetime import datetime
 
+import segmentation_models as sm
+
 
 def jaccard_distance(y_true, y_pred, smooth=100):
     intersection = tf.keras.backend.sum(tf.keras.backend.abs(y_true * y_pred), axis=-1)
@@ -15,11 +17,16 @@ def jaccard_distance(y_true, y_pred, smooth=100):
 
 
 today = datetime.today().strftime('%Y-%m-%d')
-suffix = "_iou"
+suffix = "linknet_straight_preprocess"
 
 modelpath = str(Path(__file__).resolve().parent.joinpath('model'))
 
-model = tf.keras.models.load_model(f'unused_models/{today}/checkpoint_fast_scnn_binary{suffix}.h5', custom_objects={"ResizeLayer": ResizeLayer, "jaccard_distance": jaccard_distance})
+# model = tf.keras.models.load_model(f'unused_models/{today}/checkpoint_fast_scnn_binary{suffix}.h5', custom_objects={"ResizeLayer": ResizeLayer, "jaccard_distance": jaccard_distance})
+# model = tf.keras.models.load_model(f"unused_models/2021-06-22/checkpoint_fast_scnn_binary_iou.h5", custom_objects={"ResizeLayer": ResizeLayer, "jaccard_distance": jaccard_distance})
+model = tf.keras.models.load_model(
+        f'unused_models/{today}/checkpoint_fast_scnn_binary{suffix}.h5', 
+        custom_objects={"binary_crossentropy_plus_dice_loss": sm.losses.bce_dice_loss, "iou_score": sm.metrics.IOUScore, "f1-score": sm.metrics.FScore}
+    )
 # model = tf.keras.models.load_model(f'unused_models/{today}/fast_scnn_binary{suffix}.h5', custom_objects={"ResizeLayer": ResizeLayer})
 tfjs.converters.save_keras_model(model, modelpath)
 

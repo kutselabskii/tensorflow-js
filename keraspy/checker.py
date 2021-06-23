@@ -8,9 +8,11 @@ from pathlib import Path
 from models import ResizeLayer
 from datetime import datetime
 
-
+SIZE_X = 128
+SIZE_Y = 128
 today = datetime.today().strftime('%Y-%m-%d')
-suffix = "linknet_straight"
+suffix = "linknet_straight_preprocess"
+# suffix = "simple_unet_straight"
 # suffix = ""
 
 def recolor(image, mask, texture):
@@ -22,7 +24,7 @@ def recolor(image, mask, texture):
 
     for i in range(image.size[0]):
         for j in range(image.size[1]):
-            if mask[j][i] == 0:
+            if mask[j][i] > 0:
                 xy = (i, j)
                 pixel = (texdata[i, j][0], texdata[i, j][1], data[i, j][2])
                 image.putpixel(xy, pixel)
@@ -32,7 +34,7 @@ def recolor(image, mask, texture):
 
 
 use_checkpoint = True
-offset = 338
+offset = 1
 amount = 4
 confidence_threshold = 0.5
 
@@ -41,6 +43,7 @@ texture = Image.open(texpath)
 
 if use_checkpoint:
     modelpath = f"unused_models/{today}/checkpoint_fast_scnn_binary{suffix}.h5"
+    # modelpath = f"unused_models/2021-06-22/checkpoint_fast_scnn_binary_iou.h5"
 else:
     modelpath = f'unused_models/{today}/fast_scnn_binary{suffix}.h5'
 print(modelpath)
@@ -52,8 +55,13 @@ for i in range(amount):
     current = i + offset
     number = '0' * (8 - len(str(current))) + str(current)
     path = f"D:/Git/tensorflow-js/keraspy/sofa/{number}.jpg"
-    image = Image.open(path).convert('RGB').resize((128, 128))
+    image = Image.open(path).convert('RGB').resize((SIZE_X, SIZE_Y))
+    # data = np.array([np.asarray(image).astype('float32')]) / 255
     data = np.array([np.asarray(image).astype('float32')])
+    # data = np.asarray(image)
+    # data = tf.keras.applications.mobilenet.preprocess_input(data)
+    # data = np.array([data])
+    
     res = model.predict(data)[0]
     res[res >= confidence_threshold] = 1
     res[res < confidence_threshold] = 0

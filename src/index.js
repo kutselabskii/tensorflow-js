@@ -25,6 +25,8 @@ class ResizeLayer extends tf.layers.Layer {
     }
   }
 
+const SIZE_X = 128;
+const SIZE_Y = 128;
 
 const enableWebcamButton = document.getElementById('webcamButton');
 const video = document.getElementById('webcam');
@@ -41,7 +43,7 @@ image.crossOrigin = 'anonymous';
 image.src = i1;
 image.onload = () => {
   imageTensor = tf.browser.fromPixels(image);
-  imageTensor = tf.image.resizeBilinear(imageTensor, [512, 512]).arraySync();
+  imageTensor = tf.image.resizeBilinear(imageTensor, [SIZE_X, SIZE_Y]).arraySync();
 }
 
 modelButton.addEventListener('click', modelButtonClicked);
@@ -71,16 +73,16 @@ function buttonClicked(event) {
     video.addEventListener('loadeddata', predictWebcam);
 
     webcam = await tf.data.webcam(video, {
-      resizeWidth: 512,
-      resizeHeight: 512,
+      resizeWidth: SIZE_X,
+      resizeHeight: SIZE_Y,
     });
   });
 }
 
 function recolor(image, mask) {
-  for (let i = 0; i < 512; ++i) {
-    for (let j = 0; j < 512; ++j) {
-      if (true || mask[0][i][j][1] > 0.5) {
+  for (let i = 0; i < SIZE_X; ++i) {
+    for (let j = 0; j < SIZE_Y; ++j) {
+      if ( mask[0][i][j][0] > 0.98) {
         image[0][i][j] = [imageTensor[i][j][0] / 255, imageTensor[i][j][1] / 255, imageTensor[i][j][2] / 255];
       } else {
         const img = image[0][i][j];
@@ -97,12 +99,23 @@ async function predictWebcam() {
   }
 
   var img = await webcam.capture();
-  img = img.reshape([1, 512, 512, 3]);
-  var predictions = model.predict(img);
+  img = img.reshape([1, SIZE_X, SIZE_Y, 3]);
+  // const preds = tf.add(tf.mul(tf.cast(img, 'float32'), 2 / 255), -1);
+  // console.log(img);
+  // const preds = tf.div(tf.cast(img, 'float32'), 255);
+  // console.log(preds);
+  var predictions = tf.tidy(() => {
+    // return model.predict(preds);
+    return model.predict(img);
+  });
 
+  // console.log(img.arraySync());
+  // console.log(preds.arraySync());
+  // console.log(predictions.arraySync());
+  // console.log(predictions.arraySync());
+  // return;
   const recolored = recolor(img.arraySync(), predictions.arraySync());
   // canvasCtx.drawImage(recolored, 0, 0, width, height);
-
   // console.log(recolored);
 
   const drawer = tf.squeeze(tf.tensor(recolored));

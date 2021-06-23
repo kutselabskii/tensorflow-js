@@ -8,11 +8,12 @@ from tensorflow.keras.utils import to_categorical
 
 
 class CustomDataset(tf.keras.utils.Sequence):
-    def __init__(self, batch_size, count, img_size, offset=0, *args, **kwargs):
+    def __init__(self, batch_size, count, img_size, offset=0, preprocessing=None, *args, **kwargs):
         self.batch_size = batch_size
         self.count = count
         self.offset = offset
         self.cache = {}
+        self.preprocessing = preprocessing
         # self.img_size = (img_size[1], img_size[0])
         self.img_size = (img_size[1], img_size[0])
 
@@ -53,6 +54,10 @@ class CustomDataset(tf.keras.utils.Sequence):
             # f = lambda x: to_categorical(x, num_classes=2)
             # data = np.apply_along_axis(f, 1, data)
         else:
-            data = np.asarray(image).astype('float32') / 255
+            if self.preprocessing is None:
+                data = np.asarray(image).astype('float32') / 255
+            else:
+                data = np.asarray(image)
+                data = self.preprocessing(data)
         self.cache[path] = data
         return data
