@@ -15,6 +15,7 @@ suffix = "linknet_straight_preprocess"
 # suffix = "simple_unet_straight"
 # suffix = ""
 
+
 def recolor(image, mask, texture):
     image = image.convert('HSV')
     texture = texture.resize(image.size).convert('HSV')
@@ -34,7 +35,7 @@ def recolor(image, mask, texture):
 
 
 use_checkpoint = True
-offset = 1
+offset = 25
 amount = 4
 confidence_threshold = 0.5
 

@@ -17,8 +17,11 @@
             
             <section id="demos" class="invisible">
                 <div id="liveView" class="camView">
-                    <video id="webcam"></video>
+                    <video id="webcam" autoplay width="512" height="512"></video>
                     <button class="button" id="webcamButton">Enable Webcam</button>
+                    <label>Select Video Source (Camera)</label>
+                    <select id="video-source"></select>
+
                     <canvas class="output_canvas video" width="256px" height="512px"></canvas>
                 </div>
             </section>
