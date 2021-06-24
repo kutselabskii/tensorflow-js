@@ -1,38 +1,19 @@
 import * as tf from '@tensorflow/tfjs';
+import { ResizeLayer } from './js/layers';
 import './css/style.css'
+import './css/simple-grid.css'
 
 import i1 from './img/1.jpg';
 
-class ResizeLayer extends tf.layers.Layer {
-    constructor(config) {
-        super(config);
-        this.w = config.w;
-        this.h = config.h;
-      }
-  
-    call(input) {
-      return tf.tidy(() => {
-        return tf.image.resizeBilinear(input[0], [this.w, this.h]);
-      });
-      }
-  
-    computeOutputShape(input_shape) {
-      return [input_shape[0], this.w, this.h, input_shape[3]]
-    }
-  
-    static get className() {
-      return 'ResizeLayer';
-    }
-  }
+import cameraIcon from './img/camera.png';
+import sofaIcon from './img/sofa.png';
 
 const NN_SIZE = [128, 128];
 const ORIG_SIZE = [512, 512];
 
-const enableWebcamButton = document.getElementById('webcamButton');
+const webcamButton = document.getElementById('webcamButton');
 const video = document.getElementById('webcam');
-const canvasElement = document.getElementsByClassName('output_canvas')[0];
-const canvasCtx = canvasElement.getContext('2d');
-const demosSection = document.getElementById('demos');
+const canvasElement = document.getElementById('canvas');
 const modelButton = document.getElementById('modelButton');
 var model = undefined;
 var webcam = undefined;
@@ -77,24 +58,36 @@ modelButton.addEventListener('click', modelButtonClicked);
 async function modelButtonClicked() {
   tf.serialization.registerClass(ResizeLayer);
   model = await tf.loadLayersModel("model.json");
-  modelButton.setAttribute('display', 'none');
-  demosSection.classList.remove('invisible');
+
+  modelButton.classList.add("removed");
+
+  webcamButton.classList.remove("removed");
+  document.getElementById("video-source-label").classList.remove("removed");
+  document.getElementById("video-source").classList.remove("removed");
 }
 
-enableWebcamButton.addEventListener('click', buttonClicked);
+webcamButton.addEventListener('click', webcamButtonClicked);
 
-function buttonClicked(event) {
-  event.target.classList.add('removed');
-  enableWebcamButton.setAttribute('display', 'none');
+function webcamButtonClicked() {
+  document.getElementById("camera-icon").classList.add("removed");
+  video.classList.remove("removed");
+
+  document.getElementById("sofa-icon").classList.add("removed");
+  canvasElement.classList.remove("removed");
+
+  webcamButton.classList.add("removed");
+  document.getElementById("video-source-label").classList.add("removed");
+  document.getElementById("video-source").classList.add("removed");
+
   const videoSource = videoSourcesSelect.value;
   const constraints = {
     video: {
       width: ORIG_SIZE[0],
       height: ORIG_SIZE[1],
       deviceId: videoSource ? {exact: videoSource} : undefined
-      // facingMode: 'environment'
     }
   };
+
   navigator.mediaDevices.getUserMedia(constraints).then(async function(stream) {
     video.srcObject = stream;
     video.addEventListener('loadeddata', predictWebcam);

@@ -6,10 +6,7 @@ body {
 .removed {
     display: none;
   }
-  
-.invisible {
-  visibility: collapse;
-}
+
 
 .camView {
   margin: auto;
@@ -43,43 +40,35 @@ body {
 }
 
 .button {
-  margin: auto;
-  width: 15%;
+  /* margin: auto;
+  width: 15%; */
   background-color: #FFDDD2;
   border: none;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
   font-size: 16px;
-  display: block;
-}
-
-.video {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  /* display: block; */
 }
 
 .button:hover {
   background-color: #E29578;
 }
 
-.img {
-  /* display: block;
-  float: left; */
-  height: 120px;
-  width: 120px;
-  margin-right: 5px;
+/* .column {
+  float: left;
+  width: 49.9%;
+  padding: 5px;
 }
 
-.chosen {
-  border: 3px solid green;
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
 }
 
-.input_video {
-  position:relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
+@media screen and (max-width: 500px) {
+  .column {
+    width: 100%;
+  }
+} */
