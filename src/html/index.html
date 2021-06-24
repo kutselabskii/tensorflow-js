@@ -4,9 +4,6 @@
         <title>Web AR Sofa Recoloring Tool</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
     </head>
     <body>
         <section class="centered">
@@ -44,7 +41,11 @@
             </div>
 
             <div class="row">
-                <img class="col-2" id="texture" src="/1.jpg" />
+                <div class="col-6">
+                    <img class="image highlight" id="texture-0" src="/1.jpg"/>
+                    <img class="image" id="texture-1" src="/2.jpg"/>
+                    <img class="image" id="texture-2" src="/3.jpg"/>
+                </div>
             </div>
         </section>
         <!-- main.js auto-included -->

@@ -27,3 +27,12 @@ body {
 .button:hover {
   background-color: #E29578;
 }
+
+.highlight {
+  border: 3px solid black;
+}
+
+.image {
+  width: 64px;
+  height: 64px;
+}
