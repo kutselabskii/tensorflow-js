@@ -1,12 +1,11 @@
-import * as tf from '@tensorflow/tfjs';
-import { ResizeLayer } from './js/layers';
 import './css/style.css'
 import './css/simple-grid.css'
 
-import i1 from './img/1.jpg';
+import * as images from './js/images';
 
-import cameraIcon from './img/camera.png';
-import sofaIcon from './img/sofa.png';
+import * as tf from '@tensorflow/tfjs';
+import { ResizeLayer } from './js/layers';
+import { recolor, rgbToHsv } from './js/recoloring';
 
 const NN_SIZE = [128, 128];
 const ORIG_SIZE = [512, 512];
@@ -15,6 +14,7 @@ const webcamButton = document.getElementById('webcamButton');
 const video = document.getElementById('webcam');
 const canvasElement = document.getElementById('canvas');
 const modelButton = document.getElementById('modelButton');
+const fps = document.getElementById('fps');
 var model = undefined;
 var webcam = undefined;
 var videoSourcesSelect = undefined;
@@ -40,7 +40,7 @@ navigator.mediaDevices.enumerateDevices().then((devices) => {
 var imageTensor = undefined;
 const image = new Image();
 image.crossOrigin = 'anonymous';
-image.src = i1;
+image.src = images.textures[0];
 image.onload = () => {
   tf.tidy(() => {
     imageTensor = tf.browser.fromPixels(image);
@@ -74,6 +74,7 @@ function webcamButtonClicked() {
 
   document.getElementById("sofa-icon").classList.add("removed");
   canvasElement.classList.remove("removed");
+  fps.classList.remove("removed");
 
   webcamButton.classList.add("removed");
   document.getElementById("video-source-label").classList.add("removed");
@@ -98,72 +99,12 @@ function webcamButtonClicked() {
   });
 }
 
- function rgbToHsv(r, g, b) {
-  r /= 255, g /= 255, b /= 255;
-
-  var max = Math.max(r, g, b), min = Math.min(r, g, b);
-  var h, s, v = max;
-
-  var d = max - min;
-  s = max == 0 ? 0 : d / max;
-
-  if (max == min) {
-    h = 0; // achromatic
-  } else {
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
-    }
-
-    h /= 6;
-  }
-
-  return [ h, s, v ];
-}
-
-function hsvToRgb(h, s, v) {
-  var r, g, b;
-
-  var i = Math.floor(h * 6);
-  var f = h * 6 - i;
-  var p = v * (1 - s);
-  var q = v * (1 - f * s);
-  var t = v * (1 - (1 - f) * s);
-
-  switch (i % 6) {
-    case 0: r = v, g = t, b = p; break;
-    case 1: r = q, g = v, b = p; break;
-    case 2: r = p, g = v, b = t; break;
-    case 3: r = p, g = q, b = v; break;
-    case 4: r = t, g = p, b = v; break;
-    case 5: r = v, g = p, b = q; break;
-  }
-
-  return [r, g, b];
-}
-
-async function recolor(image, mask) {
-  for (let i = 0; i < ORIG_SIZE[0]; ++i) {
-    for (let j = 0; j < ORIG_SIZE[1]; ++j) {
-      const img = image[i][j];
-      
-      if (mask[0][i][j][0] > 0.98) {
-        const i_hsv = rgbToHsv(img[0], img[1], img[2]);
-        const res_hsv = [imageTensor[i][j][0], imageTensor[i][j][1], i_hsv[2]];
-        image[i][j] = hsvToRgb(res_hsv[0], res_hsv[1], res_hsv[2]);
-      } else {
-        image[i][j] = [img[0] / 255, img[1] / 255, img[2] / 255];
-      }
-    }
-  }
-  return image;
-}
-
 async function predictWebcam() {
   if (webcam === undefined) {
     return;
   }
+
+  const start = performance.now();
 
   const original = await webcam.capture();
   const img = tf.image.resizeBilinear(original, ORIG_SIZE);
@@ -178,7 +119,7 @@ async function predictWebcam() {
 
   const imgArr = await img.array();
   const predArr = await predictions.array();
-  const recolored = await recolor(imgArr, predArr);
+  const recolored = await recolor(imgArr, predArr, imageTensor, ORIG_SIZE);
 
   tf.tidy(() => {
     tf.browser.toPixels(tf.tensor(recolored), canvasElement);
@@ -187,6 +128,8 @@ async function predictWebcam() {
   original.dispose();
   img.dispose();
   predictions.dispose();
+
+  fps.textContent = "Elapsed time: " + (performance.now() - start) / 1000 + " seconds";
 
   window.requestAnimationFrame(predictWebcam);
 }
