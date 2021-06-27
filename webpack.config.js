@@ -53,7 +53,7 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: "keraspy/model", to: "./" },
+        { from: "keraspy/models/", to: "./" },
         { from: "src/server/cert.pem", to: "cert.pem" },
         { from: "src/server/key.pem", to: "key.pem" }
       ],

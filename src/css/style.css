@@ -13,15 +13,13 @@ body {
 }
 
 .button {
-  /* margin: auto;
-  width: 15%; */
   background-color: #FFDDD2;
-  border: none;
+  border: 0.1px solid black;
+  border-radius: 0.25em;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
-  font-size: 16px;
-  /* display: block; */
+  font-size: 1.25rem;
 }
 
 .button:hover {
@@ -35,4 +33,29 @@ body {
 .image {
   width: 64px;
   height: 64px;
+}
+
+.select {
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 0.25em;
+  padding: 0.25em 0.5em;
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1.1;
+  background-color: #fff;
+  background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+}
+
+.text {
+  font-size: 1.25rem;
+  line-height: 1.1;
+}
+
+.fps {
+  background-color: #fff;
+  border: 1px solid black;
+  border-radius: 0.25em;
+  font-weight: bold;
+  text-align: center;
 }

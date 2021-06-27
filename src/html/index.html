@@ -7,45 +7,76 @@
     </head>
     <body>
         <section class="centered">
-            <h1 class="h-4">Sofa recoloring</h1>
+            <div class="row">
+                <span class="col-4"></span>
+                <h1 class="col-4 h-4 center">Sofa recoloring</h1>
+                <span class="col-4"></span>
+            </div>
             
             <div class="row">
-                <div class="col-6">
+                <span class="col-1"></span>
+                <div class="col-4">
                     <img id="camera-icon" src="/camera.png" width="512" height="512">
                     <video id="webcam" autoplay width="512" height="512" class="removed"></video>
                 </div>
-                <div class="col-6">
+                <span class="col-2"></span>
+                <div class="col-4">
                     <img id="sofa-icon" src="/sofa.png" width="512" height="512">
                     <canvas id="canvas" width="512px" height="512px" class="removed"></canvas>
                 </div>
+                <span class="col-1"></span>
             </div>
 
             <div class="row">
-                <label id="video-source-label" class="col-3 removed">Select Video Source (Camera)</label>
+                <span class="col-4"></span>
+                <label id="video-source-label" class="col-4 text removed">Select Video Source (Camera)</label>
+                <span class="col-4"></span>
             </div>
 
             <div class="row">
-                <select id="video-source" class="col-3 removed"></select>
+                <span class="col-4"></span>
+                <select id="video-source" class="col-4 select removed"></select>
+                <span class="col-4"></span>
             </div>
 
             <div class="row">
-                <button class="col-3 button removed" id="webcamButton">Enable Webcam</button>
+                <span class="col-4"></span>
+                <button class="col-4 button removed" id="webcamButton">Enable camera</button>
+                <span class="col-4"></span>
             </div>
 
             <div class="row">
-                <button class="col-3 button" id="modelButton">Load model</button>
+                <span class="col-4"></span>
+                <label id="model-source-label" class="col-4 text">Select model</label>
+                <span class="col-4"></span>
             </div>
 
             <div class="row">
-                <p class="col-2 removed" id="fps"></p>
+                <span class="col-4"></span>
+                <select id="model-source" class="col-4 select"></select>
+                <span class="col-4"></span>
             </div>
 
             <div class="row">
-                <div class="col-6">
+                <span class="col-4"></span>
+                <button class="col-4 button" id="modelButton">Load model</button>
+                <span class="col-4"></span>
+            </div>
+
+            <div class="row">
+                <span class="col-4"></span>
+                <p class="col-4 text fps removed" id="fps"></p>
+                <span class="col-4"></span>
+            </div>
+
+            <div class="row">
+                <span class="col-3"></span>
+                <div class="col-6 centered">
                     <img class="image highlight" id="texture-0" src="/1.jpg"/>
                     <img class="image" id="texture-1" src="/2.jpg"/>
                     <img class="image" id="texture-2" src="/3.jpg"/>
                 </div>
+                <span class="col-3"></span>
             </div>
         </section>
         <!-- main.js auto-included -->

@@ -24,10 +24,10 @@ path = f'unused_models/{today}/'
 
 LR = 0.01
 EPOCHS = 400
-BATCH_SIZE = 64
+BATCH_SIZE = 32
 IMG_COUNT = 9000
 TRAIN_PERCENTAGE = 0.92
-IMG_SIZE = (512, 512)
+IMG_SIZE = (128, 128)
 
 train_amount = round(IMG_COUNT * TRAIN_PERCENTAGE)
 val_amount = round(IMG_COUNT * (1 - TRAIN_PERCENTAGE))
@@ -44,13 +44,13 @@ val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, img_size=
 
 keras.backend.clear_session()
 # model = models.get_model(IMG_SIZE)
-# model = models.get_unet_model(IMG_SIZE)
-model = models.get_sm_model()
+model = models.get_unet_model(IMG_SIZE)
+# model = models.get_sm_model()
 # model = models.get_simple_unet(IMG_SIZE)
 
 
 # optimizer = tf.keras.optimizers.SGD(momentum=0.9, lr=LR)
-# optimizer = tf.keras.optimizers.Adamax(learning_rate=LR)
+optimizer = tf.keras.optimizers.Adamax(learning_rate=LR)
 # optimizer = tf.keras.optimizers.Adam(learning_rate=LR)
 # model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 # model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)])
@@ -100,20 +100,20 @@ def jaccard_distance(y_true, y_pred, smooth=100):
 
 
 # model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)], run_eagerly=False)
-# model.compile(loss=jaccard_distance, optimizer=optimizer, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)], run_eagerly=False)
+model.compile(loss=jaccard_distance, optimizer=optimizer, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)], run_eagerly=False)
 # model.compile(loss=FocalLoss, optimizer=optimizer, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)], run_eagerly=False)
 # model.compile(loss=DiceLoss, optimizer=optimizer, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)], run_eagerly=False)
 
-total_loss = sm.losses.bce_dice_loss
-# total_loss = sm.losses.binary_focal_dice_loss
-metrics = [sm.metrics.IOUScore(threshold=0.5), sm.metrics.FScore(threshold=0.5)]
-model.compile("ADAM", total_loss, metrics)
+# total_loss = sm.losses.bce_dice_loss
+# # total_loss = sm.losses.binary_focal_dice_loss
+# metrics = [sm.metrics.IOUScore(threshold=0.5), sm.metrics.FScore(threshold=0.5)]
+# model.compile("ADAM", total_loss, metrics)
 
 
 model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
     filepath=checkpoint_path,
     # monitor='val_mean_io_u',
-    monitor='val_iou_score',
+    monitor='val_mean_io_u',
     # monitor='val_accuracy',
     mode='max',
     save_best_only=True)
@@ -127,7 +127,7 @@ history = model.fit(
    epochs=EPOCHS,
    callbacks=[
        model_checkpoint_callback,
-       tf.keras.callbacks.EarlyStopping(monitor='loss', patience=20, mode='min'),
+       tf.keras.callbacks.EarlyStopping(monitor='loss', patience=50, mode='min'),
     ]
 )
 
