@@ -19,6 +19,10 @@ export function rgbToHsv(r, g, b) {
   
     return [ h, s, v ];
 }
+
+function getV(img) {
+  return Math.max(img[0], img[1], img[2])
+}
   
 function hsvToRgb(h, s, v) {
     var r, g, b;
@@ -43,12 +47,13 @@ function hsvToRgb(h, s, v) {
   
 export async function recolor(image, mask, texture, size, inverted) {
     for (let i = 0; i < size[0]; ++i) {
+      const tex_a = texture[i];
+      const img_a = image[i];
       for (let j = 0; j < size[1]; ++j) {
-        const img = image[i][j];
+        const tex = tex_a[j];
         
-        if (!inverted && mask[0][i][j][0] > 0.98 || inverted && mask[0][i][j][0] < 0.3) {
-          const i_hsv = rgbToHsv(img[0], img[1], img[2]);
-          const res_hsv = [texture[i][j][0], texture[i][j][1], i_hsv[2]];
+        if (!inverted && mask[i][j] > 0.98 || inverted && mask[i][j] < 0.3) {
+          const res_hsv = [tex[0], tex[1], getV(img_a[j])];
           image[i][j] = hsvToRgb(res_hsv[0], res_hsv[1], res_hsv[2]);
         }
       }

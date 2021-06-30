@@ -14,7 +14,7 @@ import segmentation_models as sm
 
 from datetime import datetime
 
-suffix = "linknet_straight_preprocess_255"
+suffix = "fast_scnn"
 
 today = datetime.today().strftime('%Y-%m-%d')
 modelpath = str(Path(__file__).resolve().parent.joinpath('model'))
@@ -27,7 +27,7 @@ EPOCHS = 400
 BATCH_SIZE = 32
 IMG_COUNT = 9000
 TRAIN_PERCENTAGE = 0.92
-IMG_SIZE = (128, 128)
+IMG_SIZE = (256, 256)
 
 train_amount = round(IMG_COUNT * TRAIN_PERCENTAGE)
 val_amount = round(IMG_COUNT * (1 - TRAIN_PERCENTAGE))
@@ -35,22 +35,22 @@ val_amount = round(IMG_COUNT * (1 - TRAIN_PERCENTAGE))
 # train_generator = CustomDataset(batch_size=BATCH_SIZE, count=train_amount, img_size=IMG_SIZE, preprocessing=tf.keras.applications.mobilenet.preprocess_input)
 # val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, img_size=IMG_SIZE, offset=1500, preprocessing=tf.keras.applications.mobilenet.preprocess_input)
 
-train_generator = CustomDataset(batch_size=BATCH_SIZE, count=train_amount, img_size=IMG_SIZE, preprocessing=models.get_sm_preprocessing())
-val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, img_size=IMG_SIZE, preprocessing=models.get_sm_preprocessing())
+# train_generator = CustomDataset(batch_size=BATCH_SIZE, count=train_amount, img_size=IMG_SIZE, preprocessing=models.get_sm_preprocessing())
+# val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, img_size=IMG_SIZE, preprocessing=models.get_sm_preprocessing())
 
-# train_generator = CustomDataset(batch_size=BATCH_SIZE, count=train_amount, img_size=IMG_SIZE, preprocessing=None)
-# val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, img_size=IMG_SIZE, offset=1500, preprocessing=None)
+train_generator = CustomDataset(batch_size=BATCH_SIZE, count=train_amount, img_size=IMG_SIZE, preprocessing=None)
+val_generator = CustomDataset(batch_size=BATCH_SIZE, count=val_amount, img_size=IMG_SIZE, offset=1500, preprocessing=None)
 
 
 keras.backend.clear_session()
-# model = models.get_model(IMG_SIZE)
-model = models.get_unet_model(IMG_SIZE)
+model = models.get_model(IMG_SIZE)
+# model = models.get_unet_model(IMG_SIZE)
 # model = models.get_sm_model()
 # model = models.get_simple_unet(IMG_SIZE)
 
 
-# optimizer = tf.keras.optimizers.SGD(momentum=0.9, lr=LR)
-optimizer = tf.keras.optimizers.Adamax(learning_rate=LR)
+optimizer = tf.keras.optimizers.SGD(momentum=0.9, lr=LR)
+# optimizer = tf.keras.optimizers.Adamax(learning_rate=LR)
 # optimizer = tf.keras.optimizers.Adam(learning_rate=LR)
 # model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 # model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)])

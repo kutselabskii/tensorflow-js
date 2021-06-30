@@ -4,6 +4,13 @@ const HtmlWebPackPlugin = require("html-webpack-plugin")
 const CopyPlugin = require("copy-webpack-plugin")
 
 module.exports = {
+  resolve: {
+    fallback: {
+      fs: false,
+      path: false,
+      crypto: false
+    }
+  },
   entry: {
     main: './src/index.js'
   },
