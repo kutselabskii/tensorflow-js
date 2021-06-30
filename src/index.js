@@ -17,6 +17,7 @@ var webcam = undefined;
 var videoSourcesSelect = undefined;
 var modelSourcesSelect = undefined;
 var currentImage = 0;
+var working = false;
 
 const availableModels = [new models.LinkNet(size), new models.FastSCNN(size), new models.UNet(size)];
 
@@ -27,7 +28,11 @@ function initialize() {
   prepareVideoSources();
   prepareModelSources();
 
-  images.prepareTextureTensors(size);
+  let textures = [];
+  for (let i = 0; i < images.textures.length; ++i) {
+    textures.push(document.getElementById("texture-" + i));
+  }
+  images.prepareTextureTensors(size, textures);
 }
 
 function prepareElements() {
@@ -43,6 +48,7 @@ function prepareElements() {
 }
 
 function prepareImages() {
+  const empty = document.getElementById('empty');
   for (let i = 0; i < images.textures.length; ++i) {
     const enclosedIndex = i;
     const img = document.getElementById('texture-' + i);
@@ -52,11 +58,40 @@ function prepareImages() {
         return;
       }
 
-      document.getElementById('texture-' + currentImage).classList.remove('highlight');
+      if (currentImage != -1) {
+        document.getElementById('texture-' + currentImage).classList.remove('highlight');
+      } else {
+        empty.classList.remove('highlight');
+
+        if (working) {
+          video.classList.add('removed');
+          canvasElement.classList.remove('removed');
+        } else {
+          document.getElementById("camera-icon").classList.add("removed");
+          document.getElementById("sofa-icon").classList.remove("removed");
+        }
+      }
       img.classList.add('highlight');
       currentImage = enclosedIndex;
     });
   }
+
+  empty.addEventListener('click', () => {
+    if (currentImage == -1) {
+      return;
+    }
+
+    if (working) {
+      video.classList.remove('removed');
+      canvasElement.classList.add('removed');
+    } else {
+      document.getElementById("camera-icon").classList.remove("removed");
+      document.getElementById("sofa-icon").classList.add("removed");
+    }
+    document.getElementById('texture-' + currentImage).classList.remove('highlight');
+    empty.classList.add('highlight');
+    currentImage = -1;
+  })
 }
 
 function prepareModelSources() {
@@ -86,29 +121,30 @@ function prepareVideoSources() {
 
 modelButton.addEventListener('click', modelButtonClicked);
 async function modelButtonClicked() {
+  document.getElementById("model-settings").classList.add("removed");
+  document.getElementById("loader").classList.remove("removed");
+
   await availableModels[modelSourcesSelect.value].load();
 
-  modelButton.classList.add("removed");
-  document.getElementById("model-source-label").classList.add("removed");
-  modelSourcesSelect.classList.add("removed");
-
-  webcamButton.classList.remove("removed");
-  document.getElementById("video-source-label").classList.remove("removed");
-  videoSourcesSelect.classList.remove("removed");
+  document.getElementById("loader").classList.add("removed");
+  document.getElementById("video-settings").classList.remove("removed");
 }
 
 webcamButton.addEventListener('click', webcamButtonClicked);
 function webcamButtonClicked() {
+  working = true;
+
   document.getElementById("camera-icon").classList.add("removed");
-  video.classList.remove("removed");
-
   document.getElementById("sofa-icon").classList.add("removed");
-  canvasElement.classList.remove("removed");
-  fps.classList.remove("removed");
 
-  webcamButton.classList.add("removed");
-  document.getElementById("video-source-label").classList.add("removed");
-  document.getElementById("video-source").classList.add("removed");
+  if (currentImage == -1) {
+    video.classList.remove("removed");
+  } else {
+    canvasElement.classList.remove("removed");
+  }
+
+  document.getElementById("fps-div").classList.remove("removed");
+  document.getElementById("video-settings").classList.add("removed");
 
   const videoSource = videoSourcesSelect.value;
   const constraints = {
@@ -131,7 +167,7 @@ function webcamButtonClicked() {
 }
 
 async function predictWebcam() {
-  const time = await availableModels[modelSourcesSelect.value].predict(images.tensors[currentImage]);
+  const time = await availableModels[modelSourcesSelect.value].predict(currentImage == -1 ? undefined : images.tensors[currentImage]);
 
   if (time < 0) {
     return;

@@ -14,65 +14,72 @@
             </div>
             
             <div class="row">
-                <span class="col-1"></span>
+                <span class="col-4"></span>
                 <div class="col-4">
-                    <img id="camera-icon" src="/camera.png" width="512" height="512">
+                    <img id="camera-icon" src="/camera.png" width="512" height="512" class="removed">
                     <video id="webcam" autoplay width="512" height="512" class="removed"></video>
-                </div>
-                <span class="col-2"></span>
-                <div class="col-4">
+
                     <img id="sofa-icon" src="/sofa.png" width="512" height="512">
                     <canvas id="canvas" width="512px" height="512px" class="removed"></canvas>
                 </div>
-                <span class="col-1"></span>
-            </div>
-
-            <div class="row">
-                <span class="col-4"></span>
-                <label id="video-source-label" class="col-4 text removed">Select Video Source (Camera)</label>
                 <span class="col-4"></span>
             </div>
 
-            <div class="row">
-                <span class="col-4"></span>
-                <select id="video-source" class="col-4 select removed"></select>
-                <span class="col-4"></span>
+
+            <div id="video-settings" class="removed">
+                <div class="row">
+                    <span class="col-4"></span>
+                    <label id="video-source-label" class="col-4 text">Select Video Source (Camera)</label>
+                    <span class="col-4"></span>
+                </div>
+    
+                <div class="row">
+                    <span class="col-4"></span>
+                    <select id="video-source" class="col-4 select"></select>
+                    <span class="col-4"></span>
+                </div>
+    
+                <div class="row">
+                    <span class="col-4"></span>
+                    <button class="col-4 button" id="webcamButton">Enable camera</button>
+                    <span class="col-4"></span>
+                </div>
             </div>
 
-            <div class="row">
-                <span class="col-4"></span>
-                <button class="col-4 button removed" id="webcamButton">Enable camera</button>
-                <span class="col-4"></span>
+            <div id="model-settings">
+                <div class="row">
+                    <span class="col-4"></span>
+                    <label id="model-source-label" class="col-4 text">Select model</label>
+                    <span class="col-4"></span>
+                </div>
+    
+                <div class="row">
+                    <span class="col-4"></span>
+                    <select id="model-source" class="col-4 select"></select>
+                    <span class="col-4"></span>
+                </div>
+    
+                <div class="row">
+                    <span class="col-4"></span>
+                    <button class="col-4 button" id="modelButton">Load model</button>
+                    <span class="col-4"></span>
+                </div>
             </div>
 
-            <div class="row">
-                <span class="col-4"></span>
-                <label id="model-source-label" class="col-4 text">Select model</label>
-                <span class="col-4"></span>
-            </div>
+            <div id="loader" class="loader removed"></div>
 
-            <div class="row">
-                <span class="col-4"></span>
-                <select id="model-source" class="col-4 select"></select>
-                <span class="col-4"></span>
-            </div>
-
-            <div class="row">
-                <span class="col-4"></span>
-                <button class="col-4 button" id="modelButton">Load model</button>
-                <span class="col-4"></span>
-            </div>
-
-            <div class="row">
-                <span class="col-4"></span>
-                <p class="col-4 text fps removed" id="fps"></p>
-                <span class="col-4"></span>
+            <div id="fps-div" class="removed">
+                <div class="row">
+                    <span class="col-4"></span>
+                    <p class="col-4 text fps" id="fps"></p>
+                    <span class="col-4"></span>
+                </div>
             </div>
 
             <div class="row">
                 <span class="col-3"></span>
-                <div class="col-6 centered">
-                    <!-- <img class="image" id="empty" src="/empty.png"> -->
+                <div class="col-6 images">
+                    <img class="image" id="empty" src="/chess.png">
                     <img class="image highlight" id="texture-0" src="/1.jpg"/>
                     <img class="image" id="texture-1" src="/2.jpg"/>
                     <img class="image" id="texture-2" src="/3.jpg"/>

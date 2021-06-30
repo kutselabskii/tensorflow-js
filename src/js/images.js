@@ -2,6 +2,7 @@ import * as tf from '@tensorflow/tfjs';
 
 import cameraIcon from '../img/camera.png';
 import sofaIcon from '../img/sofa.png';
+import empty from '../img/chess.png';
 import t1 from '../img/1.jpg';
 import t2 from '../img/2.jpg';
 import t3 from '../img/3.jpg';
@@ -12,9 +13,10 @@ import { rgbToHsv } from './recoloring';
 export const textures = [t1, t2, t3];
 export var tensors = [];
 
-export function prepareTextureTensors(size) {
+export function prepareTextureTensors(size, htmlImages) {
     textures.forEach(texture => {
         const image = new Image();
+        const enclosedTexture = texture;
         image.crossOrigin = 'anonymous';
 
         image.onload = () => {
@@ -30,6 +32,7 @@ export function prepareTextureTensors(size) {
             });
 
             tensors.push(tensor);
+            htmlImages[tensors.length - 1].src = enclosedTexture;
         };
 
         image.src = texture;
