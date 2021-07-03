@@ -223,7 +223,7 @@ async function predictWebcam() {
     time = await availableModels[modelSourcesSelect.value].predict(currentImage == -1 ? undefined : images.tensors[currentImage], undefined);
   } else {
     if (currentImage == -1) {
-      tf.browser.toPixels(customImage, canvasElement);
+      tf.browser.toPixels(customImage.div(255), canvasElement);
       time = 0;
     } else {
       time = await availableModels[modelSourcesSelect.value].predict(images.tensors[currentImage], tf.clone(customImage));
