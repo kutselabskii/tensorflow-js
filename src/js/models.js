@@ -25,14 +25,20 @@ export class LinkNet {
         this.canvas = canvas;
     }
 
-    async predict(texture) {
-        if (this.webcam === undefined) {
+    async predict(texture, custom) {
+        if (this.webcam === undefined && custom === undefined) {
             return -1;
           }
         
           const start = performance.now();
-        
-          const original = await this.webcam.capture();
+          
+          var original = undefined;
+          if (custom === undefined) {
+            original = await this.webcam.capture();
+          } else {
+            original = custom;
+          }
+
           const img = tf.image.resizeBilinear(original, this.cameraSize);
         
           const predictions = tf.tidy(() => {
@@ -83,14 +89,20 @@ export class FastSCNN {
         this.canvas = canvas;
     }
 
-    async predict(texture) {
-        if (this.webcam === undefined) {
+    async predict(texture, custom) {
+        if (this.webcam === undefined && custom === undefined) {
             return -1;
           }
         
           const start = performance.now();
         
-          const original = await this.webcam.capture();
+          var original = undefined;
+          if (custom === undefined) {
+            original = await this.webcam.capture();
+          } else {
+            original = custom;
+          }
+
           const img = tf.image.resizeBilinear(original, this.cameraSize).div(255);
         
           const predictions = tf.tidy(() => {
@@ -141,14 +153,20 @@ export class UNet {
         this.canvas = canvas;
     }
 
-    async predict(texture) {
-        if (this.webcam === undefined) {
+    async predict(texture, custom) {
+        if (this.webcam === undefined && custom === undefined) {
             return -1;
           }
         
           const start = performance.now();
         
-          const original = await this.webcam.capture();
+          var original = undefined;
+          if (custom === undefined) {
+            original = await this.webcam.capture();
+          } else {
+            original = custom;
+          }
+
           const img = tf.image.resizeBilinear(original, this.cameraSize).div(255);
         
           const predictions = tf.tidy(() => {
