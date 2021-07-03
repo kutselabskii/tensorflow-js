@@ -179,6 +179,7 @@ async function modelButtonClicked() {
 
   document.getElementById("loader").classList.add("removed");
   document.getElementById("type-selection-div").classList.remove("removed");
+  document.getElementById("name-label").innerText = "Model name: " + availableModels[modelSourcesSelect.value].name;
 }
 
 webcamButton.addEventListener('click', webcamButtonClicked);
