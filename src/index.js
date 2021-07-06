@@ -17,6 +17,7 @@ var webcam = undefined;
 var videoSourcesSelect = undefined;
 var modelSourcesSelect = undefined;
 var currentImage = 0;
+var currentExample = 0;
 var working = false;
 var fileReaderElement = undefined;
 var customImage = undefined;
@@ -146,7 +147,21 @@ function prepareVideoSources() {
   });
 }
 
+
 function prepareImageLoader() {
+  document.getElementById('exampleButton').addEventListener('click', async () => {
+    const image = document.getElementById("example-" + currentExample);
+
+    currentExample = (currentExample + 1) % images.examples.length;
+
+    if (customImage !== undefined) {
+      customImage.dispose();
+    }
+    
+    customImage = tf.image.resizeBilinear(tf.browser.fromPixels(image), size);
+    await predictWebcam();
+  });
+
   fileReaderElement = document.getElementById("file-loader");
   fileReaderElement.addEventListener("change", () => {
       var reader = new FileReader();

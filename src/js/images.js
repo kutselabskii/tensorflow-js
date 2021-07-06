@@ -6,11 +6,16 @@ import empty from '../img/chess.png';
 import t1 from '../img/1.jpg';
 import t2 from '../img/2.jpg';
 import t3 from '../img/3.jpg';
+import e1 from '../img/e1.jpg';
+import e2 from '../img/e2.jpg';
+import e3 from '../img/e3.jpg';
+import e4 from '../img/e4.jpg';
 
 import { rgbToHsv } from './recoloring';
 
 
 export const textures = [t1, t2, t3];
+export const examples = [e1, e2, e3, e4];
 export var tensors = [];
 
 export function prepareTextureTensors(size, htmlImages) {
